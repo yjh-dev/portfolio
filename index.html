@@ -253,8 +253,15 @@
 
   /* 경력 */
   .roles{display:grid;gap:clamp(1.75rem,4vw,3rem);margin-block-start:clamp(2rem,5vh,3.5rem)}
-  @media (width >= 60rem){.roles{grid-template-columns:repeat(2,1fr);gap:clamp(1rem,2.2vh,1.75rem) clamp(1.5rem,3vw,2.5rem);margin-block-start:clamp(1.25rem,3vh,2.25rem)}}
-  @media (width >= 82rem){.roles{grid-template-columns:repeat(4,1fr);gap:clamp(1.25rem,2.4vw,2rem)}}
+  /* 넓은 화면에서는 열을 나누지 않고 가로 타임라인으로 — 열을 쪼개면 한 줄이 15자로 줄어 읽기 어렵다 */
+  @media (width >= 60rem){
+    .roles{grid-template-columns:1fr;gap:clamp(.6rem,1.5vh,1.1rem);margin-block-start:clamp(1rem,2.4vh,1.9rem)}
+    .roles li{display:grid;grid-template-columns:clamp(11rem,17.5vw,18.5rem) minmax(0,1fr);padding-block-start:1rem;
+              column-gap:clamp(1.5rem,3vw,3rem);align-items:start}
+    .roles li > .when,.roles li > .who,.roles li > .what{grid-column:1}
+    .roles li > .what{margin-block-end:0}
+    .roles li > .body-2{grid-column:2;grid-row:1 / span 3;max-inline-size:66ch}
+  }
   .cols3 > div{padding-block-start:1.1rem;border-block-start:1px solid var(--hair)}
   .books{display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap}
   .books img{inline-size:clamp(3.2rem,4.4vw,4.6rem);block-size:auto;border-radius:4px;
@@ -263,7 +270,7 @@
   .roles li{padding-block-start:1.25rem;border-block-start:1px solid var(--hair)}
   .roles .when{color:var(--ink-3);font-size:var(--t-small);font-variant-numeric:tabular-nums}
   .roles .who{font-size:var(--t-h3);letter-spacing:-.025em;font-weight:640;margin-block-start:.35rem}
-  .roles .what{color:var(--ink-3);font-size:var(--t-small);margin-block:.25rem .7rem}
+  .roles .what{color:var(--ink-3);font-size:var(--t-small);margin-block:.25rem .7rem;text-wrap:balance}
 
   /* 결과 숫자 */
   .results{display:grid;gap:1.5rem 3rem;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr))}
@@ -679,31 +686,31 @@
 <section id="career" class="slide">
   <div class="inner">
     <p class="eyebrow rise">Career</p>
-    <h2 class="h2 rise">레거시에서 시작해<br>레거시를 옮기는 일까지</h2>
+    <h2 class="h2 rise">레거시에서 시작해 레거시를 옮기기까지</h2>
     <ul class="roles">
       <li class="rise">
         <div class="when">2024.09 — 2026.07</div>
         <div class="who">모바일파트너스</div>
         <div class="what">책임연구원 · 1년 10개월 · 자체 솔루션</div>
-        <p class="body-2">모바일 앱 운영 B2B SaaS <b>AppBox</b>의 본 서비스를 <b>Laravel 11 · PHP 8.2</b>로 1년 9개월간 개발·운영했습니다 — 팀 전체 2,349커밋 중 <b>1,585건(67%)이 제 커밋</b>으로 2위 기여자의 3.4배입니다. 이후 이 시스템을 Next.js + Go 구조로 무중단 점진 이관했고 <b>신규 스택은 단독으로 구축</b>했습니다. GPS 기반 실시간 채팅 <b>돌콩</b>의 채팅 서버와 운영 백오피스도 혼자 만들었습니다.</p>
+        <p class="body-2">모바일 앱 운영 B2B SaaS AppBox의 본 서비스를 <b>Laravel 11</b>로 1년 9개월간 개발·운영했습니다. 팀 전체 2,349커밋 중 <b>1,585건(67%)이 제 커밋</b>으로, 2위 기여자의 3.4배입니다. 이후 같은 시스템을 Next.js + Go 구조로 무중단 이관했고 신규 스택은 단독으로 구축했습니다. GPS 실시간 채팅 돌콩의 채팅 서버와 백오피스도 혼자 만들었습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2025.03 — 2026.01</div>
         <div class="who">프리랜스</div>
-        <div class="what">인슈플러스 · 플라잉닥터스 · 재직 중 병행</div>
-        <p class="body-2">전 소속사에서 담당하던 여행보험 B2C 서비스(PHP 레거시)를 위탁받아 <b>단독 유지보수</b>했습니다. 요청 60건을 처리하며 <b>ISMS-P 인증 요건</b>(개인정보 마스킹·컬럼 암호화·조회 통제·동시접속 제한)을 운영에 반영했고, 결제·알림톡 장애와 AWS EC2 운영을 맡았습니다.</p>
+        <div class="what">인슈플러스 · 플라잉닥터스 (재직 중 병행)</div>
+        <p class="body-2">전 소속사에서 담당하던 여행보험 B2C 서비스(<b>PHP 레거시</b>)를 위탁받아 단독 유지보수했습니다. 요청 60건을 처리하며 <b>ISMS-P 인증 요건</b>을 운영 서버에 반영했고 — 개인정보 마스킹, 컬럼 암호화, 조회 통제, 동시접속 제한 — 결제·알림톡 장애와 AWS EC2 운영을 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2023.05 — 2024.05</div>
         <div class="who">코드아이디어</div>
         <div class="what">주임 · 1년 1개월 · SI</div>
-        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 운영 중인 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 <b>PC 백엔드·프론트를 Java 17 · Spring Boot 3 구조로 단독 재구축</b>했습니다(231파일 · 10,835줄 · 커밋 100%). 여행보험 B2C의 PG 결제 모듈 교체와 <b>Laravel 10</b> 기반 고객사 웹 2건도 맡았습니다.</p>
+        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 단독 재구축</b>했습니다(231파일 · 커밋 100%). 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2022.04 — 2023.05</div>
         <div class="who">비젠소프트</div>
         <div class="what">사원 · 1년 2개월 · 웹에이전시</div>
-        <p class="body-2"><b>JSP · Spring</b>과 <b>PHP</b> 레거시 기반으로 사내 ERP, 장비 예약 시스템, 전자계약 웹 서비스 등 고객사 6건을 개발했습니다. 남이 쓴 레거시 코드를 읽고 고치는 훈련을 이때 했습니다.</p>
+        <p class="body-2"><b>JSP · Spring</b>과 PHP 레거시로 사내 ERP, 장비 예약, 전자계약 등 고객사 웹 서비스 6건을 개발했습니다. 남이 쓴 레거시 코드를 읽고 고치는 훈련을 이때 했습니다.</p>
       </li>
     </ul>
   </div>
