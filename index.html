@@ -687,7 +687,7 @@
   <div class="inner">
     <ul class="figures rise">
       <li><b><span class="tick" style="--to:4"></span>년 <span class="tick" style="--to:1"></span>개월</b><span>총 경력 · 3개 회사</span></li>
-      <li><b><span class="tick" style="--to:2"></span>년 <span class="tick" style="--to:3"></span>개월</b><span>Java · Spring Boot 백엔드 · 저장소 6개 · 52,146줄</span></li>
+      <li><b><span class="tick" style="--to:2"></span>년 <span class="tick" style="--to:3"></span>개월</b><span>Java · Spring Boot 백엔드</span></li>
     </ul>
   </div>
 </section>
@@ -714,7 +714,7 @@
         <div class="when">2023.05 — 2024.05</div>
         <div class="who">코드아이디어</div>
         <div class="what">주임 · 1년 1개월 · SI</div>
-        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>(231파일 · 첫 커밋부터 제가 작성). 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
+        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>(첫 커밋부터 제가 작성). 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2022.04 — 2023.05</div>
@@ -817,11 +817,10 @@
     <h3 class="h3 rise">“레거시”라고 불렀지만<br>매일 돌아가던 제품이었습니다</h3>
     <p class="body-2 mt-s rise" style="max-inline-size:84ch">이관 이야기를 하기 전에 — 저는 이 Laravel 시스템을 <b>1년 9개월 동안 계속 만져 온 사람</b>입니다. 고객사가 매일 쓰는 기능이 전부 여기 있었고, 신규 구조는 이 코드를 충분히 안 뒤에야 그릴 수 있었습니다.</p>
     <ul class="results mt-m rise">
-      <li><b>24,656</b><span>제가 맡아 운영한 애플리케이션 코드 줄 수</span></li>
       <li><b>1년 9개월</b><span>2024.10 – 2026.06 연속 커밋</span></li>
     </ul>
     <dl class="spec spec-tight mt-m rise">
-      <dt>Laravel 11 · PHP 8.2</dt><dd>컨트롤러 <b>49</b> · 서비스 13 · 미들웨어 13 · 마이그레이션 31 · 라우트 <b>229</b> · Blade 뷰 126</dd>
+      <dt>Laravel 11 · PHP 8.2</dt><dd>컨트롤러 · 서비스 · 미들웨어 · 마이그레이션 · 라우트 · Blade 뷰까지 애플리케이션 전 계층을 직접 다뤘습니다</dd>
       <dt>아티즌 커맨드 34</dt><dd>빌드·발송·정산 배치를 <b>스케줄러가 부르는 커맨드</b>로 떼어냈습니다 — 웹 요청과 배치가 같은 실행 경로를 쓰지 않게 한 자리입니다</dd>
       <dt>이관과의 관계</dt><dd>Next.js·Go 구조는 이 코드를 버리고 다시 쓴 게 아니라 <b>여기서 알아낸 도메인을 옮긴 것</b>입니다. 구독 게이팅·인증 회귀 2건을 운영 반영 전에 잡을 수 있던 것도 원본을 알고 있었기 때문입니다</dd>
     </dl>
@@ -956,7 +955,7 @@
         <p class="body-2 mt-s"><code>journey_instances</code>는 <b>정의가 PostgreSQL에 남아 있는데 실제 읽기·쓰기는 MongoDB</b>에서 일어납니다. 디바이스 단위 고쓰기라 Mongo가 맞고, 초기에 PG로 설계했다가 옮기면서 <b>PG 정의를 지우지 않았습니다.</b> 발견했고 정리 대상으로 보고 있습니다 — 숨기면 저장소에서 바로 걸리는 종류입니다.</p></div>
     </div>
     <dl class="spec mt-m rise">
-      <dt>규모</dt><dd>PostgreSQL 9스키마 81테이블 — core · billing · messaging · build · cms · mailing · support · backoffice · audit / MongoDB 22컬렉션 / Redis 4인스턴스</dd>
+      <dt>구성</dt><dd>PostgreSQL 스키마 분리 — core · billing · messaging · build · cms · mailing · support · backoffice · audit / MongoDB / Redis</dd>
     </dl>
   </div>
 </section>
@@ -1000,11 +999,11 @@
     </figure>
 
     <hr class="hair mt-m">
-    <p class="small mt-m rise">서비스 구성 — 저장소 6개를 서버 3대에</p>
+    <p class="small mt-m rise">서비스 구성 — 역할별로 서버를 나눴습니다</p>
     <dl class="spec spec-tight mt-s rise">
       <dt>web · 107</dt><dd><b>console</b> 고객 콘솔 (Next.js 16) · <b>backoffice</b> 운영 (Next.js) · <b>api</b> SDK·콜백·스케줄러 (Go/Echo) · <b>landing</b> 레거시 본 서비스 (Laravel 11) · <b>demo</b> 가상 고객사</dd>
       <dt>push · 103</dt><dd><b>push</b> 발송 워커 (Go) — Redis Stream 을 소비해 FCM·SMTP 로 보냅니다. 접수와 물리적으로 분리한 자리입니다</dd>
-      <dt>db · 106</dt><dd>PostgreSQL · MongoDB · Redis <b>4인스턴스</b> (dev·prod × cache·queue)</dd>
+      <dt>db · 106</dt><dd>PostgreSQL · MongoDB · Redis — <b>캐시와 큐를 따로</b> 두고 dev·prod 를 가릅니다</dd>
       <dt>환경 분리</dt><dd>같은 서버 안에서 dev·prod 를 <b>포트와 systemd 유닛</b>으로 가릅니다. 설정은 <code>_infra/</code> 에 저장소로 관리합니다</dd>
     </dl>
   </div>
@@ -1086,11 +1085,9 @@
   <div class="inner">
     <p class="eyebrow rise">규모와 기여</p>
     <ul class="results mt-m rise">
-      <li><b>6</b><span>Spring Boot 저장소 · Java 569파일 52,146줄</span></li>
-      <li><b>787</b><span>매핑된 엔드포인트 · 컨트롤러 68 · MyBatis 매퍼 55</span></li>
       <li><b>5주</b><span>PC v2 백엔드·프론트 — 첫 커밋부터 제가 작성</span></li>
     </ul>
-    <p class="small mt-m rise" style="max-inline-size:84ch;color:var(--ink-2)"><b>기여를 나눠서 말하면 이렇습니다</b> — v1(2023.05–2024.04)에서는 147커밋으로 팀의 한 명이었고, 모바일 v2는 절반(백 58/120 · 프론트 70/149)이었으며, <b>PC v2는 2024.04 첫 커밋부터 2024.05까지 5주간 제가 작성</b>했습니다(백 231파일 10,835줄 · 프론트 18파일). 어디까지가 팀이고 어디부터가 저인지 저장소로 확인할 수 있습니다.</p>
+    <p class="small mt-m rise" style="max-inline-size:84ch;color:var(--ink-2)"><b>기여를 나눠서 말하면 이렇습니다</b> — v1(2023.05–2024.04)에서는 팀의 한 명이었고, 모바일 v2는 팀과 나눠 맡았으며, <b>PC v2는 2024.04 첫 커밋부터 2024.05까지 5주간 제가 작성</b>했습니다. 어디까지가 팀이고 어디부터가 저인지 저장소로 확인할 수 있습니다.</p>
     <hr class="hair mt-l">
     <dl class="spec spec-tight mt-m rise">
       <dt>맡은 기능</dt><dd>웹·앱 공용 RESTful API 설계 · 기업 간 채팅과 푸시 알림 · <b>기업별 구독 플랜과 구독 상태 관리</b> · Quartz 배치 · Flutter WebView 앱 패킹</dd>
@@ -1568,7 +1565,7 @@
     <h2 class="h2 rise">기술 스택</h2>
     <div class="flowline mt-l" aria-hidden="true"><div class="marquee"><span>PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot ·</span><span>PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot ·</span></div></div>
     <dl class="spec mt-l rise">
-      <dt>주력</dt><dd><b>PHP · Laravel</b> (4년) &nbsp;/&nbsp; <b>Java · Spring Boot</b> (2년 3개월 · 저장소 6개)<br><span class="sub">실무 4년 대부분을 이 두 스택 위에서 일했습니다</span></dd>
+      <dt>주력</dt><dd><b>PHP · Laravel</b> (4년) &nbsp;/&nbsp; <b>Java · Spring Boot</b> (2년 3개월)<br><span class="sub">실무 4년 대부분을 이 두 스택 위에서 일했습니다</span></dd>
       <dt>그 외 언어</dt><dd>Go · Node.js · TypeScript · Dart</dd>
       <dt>백엔드</dt><dd>Spring Boot (MyBatis · JPA · Spring Security · Quartz) · Laravel (Eloquent · Artisan · Blade) · Echo(Go) · Express · NestJS</dd>
       <dt>프론트엔드 · 앱</dt><dd>Thymeleaf · Blade · jQuery &nbsp;/&nbsp; Next.js · React &nbsp;/&nbsp; Flutter · Electron</dd>
