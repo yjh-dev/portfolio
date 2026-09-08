@@ -85,28 +85,36 @@
 }
 
 /* ══════════ 필름스트립 ══════════
-   좁은 화면 : 위에서 아래로 쌓인다
-   넓은 화면 : 왼쪽에서 오른쪽으로 넘어간다             */
+   좁은 화면 : 전부 위에서 아래로 쌓인다
+   넓은 화면 : 프로젝트 사이는 좌우로, 한 프로젝트 안은 위아래로  */
 @layer deck {
   .deck{display:flex;flex-direction:column}
+  .chap{display:contents}
   .slide{position:relative;padding-inline:var(--pad);
          padding-block:clamp(4.5rem,11vh,7rem) clamp(3.5rem,9vh,6rem);
          scroll-margin-block-start:5rem}
   .slide > .inner{inline-size:min(100%,var(--max));margin-inline:auto}
   .slide.tint{background:var(--bg-2)}
   .slide.invert{background:var(--ink);color:#000}
-  .slide.invert .figures > li > span{color:#0000008c;border-block-start-color:#00000026}
 
   @media (width >= 64rem){
     :root{--pad:max(var(--gut),5.6rem)}
     html,body{block-size:100%;overflow:hidden}
     body{timeline-scope:--page}
-    .deck{flex-direction:row;block-size:100svh;inline-size:100vw;
+    .deck{flex-direction:row;block-size:100svh;inline-size:100vw;position:relative;
           overflow-x:auto;overflow-y:hidden;
           scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
           scroll-timeline:--page inline;scrollbar-width:none}
     .deck::-webkit-scrollbar{display:none}
-    .slide{flex:0 0 100vw;inline-size:100vw;block-size:100svh;
+    /* 한 프로젝트가 한 칸이다. 칸 안은 세로로 넘긴다.
+       가로를 clip 으로 두면 가로 스크롤 컨테이너가 되지 않아,
+       칸 안의 화면들이 여전히 .deck 의 가로 진행도를 볼 수 있다. */
+    .chap{display:block;position:relative;flex:0 0 100vw;inline-size:100vw;block-size:100svh;
+          overflow-x:clip;overflow-y:auto;overscroll-behavior-y:contain;
+          scroll-snap-type:y mandatory;scroll-snap-align:start;scroll-snap-stop:always;
+          scrollbar-width:none}
+    .chap::-webkit-scrollbar{display:none}
+    .slide{inline-size:100%;block-size:100svh;
            scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;
            display:grid;align-content:center;
            padding-block:clamp(4.5rem,9vh,6rem) clamp(2.5rem,6vh,4rem);
@@ -182,19 +190,6 @@
     84% {opacity:1}
     100%{inset-block-start:3.4rem;opacity:0}
   }
-  @media (width >= 64rem){
-    .hint-rail{inline-size:3.6rem;block-size:2px}
-    /* 세로 규칙을 되돌린다 — inset-block-start:auto 를 쓰면 inset-block:0 이 풀려 높이가 0이 된다 */
-    .hint-rail i{inset-block:0;block-size:auto;inline-size:1.2rem;
-                 inset-inline-start:0;inset-inline-end:auto;
-                 animation:driftX 2.6s linear infinite}
-    @keyframes driftX{
-      0%  {inset-inline-start:-1.2rem;opacity:0}
-      16% {opacity:1}
-      84% {opacity:1}
-      100%{inset-inline-start:3.6rem;opacity:0}
-    }
-  }
   .on-light .hint-rail{background:#00000024}
   .on-light .hint-rail i{background:#00000080}
   .on-light .hint-tip{background:#00000059}
@@ -236,18 +231,24 @@
   .on-light .code{background:#0000000a;box-shadow:inset 0 0 0 1px #00000014;color:#00000099}
   .on-light .code b{color:#000}
 
-  /* 숫자 */
-  .figures{display:grid;gap:clamp(1.5rem,4vw,3.5rem);
-           grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))}
-  .figures > li{display:flex;flex-direction:column}
-  /* 숫자가 한 줄이든("0건") 두 줄이든("4년 1개월") 블록 높이를 2줄로 맞춘다.
-     그래야 아래 구분선이 전부 같은 높이에 온다. */
-  .figures b{display:block;font-size:clamp(2.2rem,min(4.6vw,9svh),5rem);font-weight:660;
-             letter-spacing:-.055em;line-height:1;font-variant-numeric:tabular-nums;
-             min-block-size:2.05em;min-block-size:2lh}
-  .figures > li > span{display:block;padding-block-start:1.2rem;margin-block-start:1.2rem;
-             border-block-start:1px solid currentColor;color:var(--ink-3);
-             font-size:var(--t-small);line-height:1.5}
+  /* 총 경력 */
+  .bignum{font-size:clamp(2.6rem,min(6.4vw,12svh),6.2rem);font-weight:660;
+          letter-spacing:-.055em;line-height:1;font-variant-numeric:tabular-nums}
+
+  /* 기간 막대 — 두 스택을 이어 쓴 게 아니라 겹쳐 썼다는 걸 길이로 보인다.
+     같은 지점에서 함께 출발하므로 두 기간을 더하는 오해가 생기지 않는다. */
+  .lanes{display:grid;gap:clamp(1rem,2.4vh,1.7rem);max-inline-size:46rem}
+  .lanes > li{display:grid;gap:.5rem}
+  .lane-k{font-size:var(--t-small);font-weight:640;letter-spacing:-.012em}
+  .lane-b{display:block;block-size:.6rem;border-radius:999px;background:#00000012}
+  .lane-b > i{display:block;block-size:100%;border-radius:999px;
+              inline-size:calc(var(--to,100) * 1%);background:#111;
+              transform-origin:left center}
+  .lanes .j .lane-b > i{background:#0057d8}
+  .lane-v{font-size:calc(var(--t-small) * .94);color:#00000091;
+          font-variant-numeric:tabular-nums}
+  .invert .lead{color:#00000099}
+  .invert .small{color:#0000007a}
   /* 바닥 정렬(margin-top:auto)을 쓰면 라벨 줄 수가 다를 때 구분선이 어긋난다 —
      숫자 블록 바로 아래로 고정한다. */
 
@@ -500,11 +501,11 @@
   .slide > .inner > *:nth-child(4){--d:3}
   .slide > .inner > *:nth-child(n+5){--d:4}
   .cols3 > *:nth-child(2),.hrow > *:nth-child(2),.roles > *:nth-child(2),
-  .figures > *:nth-child(2),.results > *:nth-child(2){--d2:1}
+  .lanes > *:nth-child(2),.results > *:nth-child(2){--d2:1}
   .cols3 > *:nth-child(3),.hrow > *:nth-child(3),.roles > *:nth-child(3),
-  .figures > *:nth-child(3),.results > *:nth-child(3){--d2:2}
+  .results > *:nth-child(3){--d2:2}
   .roles > *:nth-child(4){--d2:3}
-  .hrow > *:nth-child(4),.figures > *:nth-child(4),.results > *:nth-child(4){--d2:3}
+  .hrow > *:nth-child(4),.results > *:nth-child(4){--d2:3}
   .hrow > *:nth-child(5){--d2:4}
   .rise{--dd:calc(var(--d,0) + var(--d2,0))}
 
@@ -517,58 +518,40 @@
     @keyframes fadeUp{from{opacity:0;translate:0 14px}}
     .cue .mark{display:inline-block;animation:bobY 2.4s ease-in-out infinite}
     @keyframes bobY{50%{translate:0 4px}}
-    @media (width >= 64rem){
-      .cue .mark{animation-name:bobX}
-      @keyframes bobX{50%{translate:4px 0}}
-    }
   }
 
   .tick{counter-reset:v var(--to)}
   .tick::after{content:counter(v)}
   @keyframes tick{from{--v:0}}
 
-  /* ── 세로 모드 ── */
-  @media (width < 64rem){
-    @supports (animation-timeline:scroll()){
-    }
-    @supports (animation-timeline:view()){
-      @media (prefers-reduced-motion:no-preference){
-        .rise{animation:riseY linear both;animation-timeline:view();
-              animation-range-start:entry calc(2% + var(--dd,0) * 3%);
-              animation-range-end:cover calc(20% + var(--dd,0) * 3%)}
-        @keyframes riseY{from{opacity:0;translate:0 26px;filter:blur(6px)}}
-        .shot{animation:wipeY linear both;animation-timeline:view();animation-range:entry 0% entry 92%}
-        @keyframes wipeY{from{clip-path:inset(0 0 100% 0);scale:1.06;opacity:.35}}
-        .tick{--v:var(--to);counter-reset:v var(--v);
-              animation:tick linear both;animation-timeline:view();animation-range:entry 14% cover 32%}
-      }
+  /* ── 화면이 아래에서 올라올 때 ──
+     좁은 화면의 문서 스크롤과, 넓은 화면에서 프로젝트 안을 넘길 때 함께 쓴다. */
+  @supports (animation-timeline:view()){
+    @media (prefers-reduced-motion:no-preference){
+      .rise{animation:riseY linear both;animation-timeline:view();
+            animation-range-start:entry calc(2% + var(--dd,0) * 3%);
+            animation-range-end:cover calc(20% + var(--dd,0) * 3%)}
+      @keyframes riseY{from{opacity:0;translate:0 26px;filter:blur(6px)}}
+      .shot{animation:wipeY linear both;animation-timeline:view();animation-range:entry 0% entry 92%}
+      @keyframes wipeY{from{clip-path:inset(0 0 100% 0);scale:1.06;opacity:.35}}
+      .tick{--v:var(--to);counter-reset:v var(--v);
+            animation:tick linear both;animation-timeline:view();animation-range:entry 14% cover 32%}
+      /* 막대는 왼쪽에서 자란다 */
+      .lane-b > i{animation:laneGrow linear both;animation-timeline:view();
+                  animation-range:entry 16% cover 30%}
+      @keyframes laneGrow{from{scale:0 1}}
     }
   }
 
-  /* ── 가로 모드 ── */
+  /* ── 넓은 화면 ── */
   @media (width >= 64rem){
-    @supports (animation-timeline:scroll()){
-    }
     @supports (animation-timeline:view()){
       @media (prefers-reduced-motion:no-preference){
-        /* 글 : 오른쪽에서 순서대로 밀려 들어오며 선명해진다 */
-        .rise{animation:riseX linear both;animation-timeline:view(inline);
-              animation-range-start:entry calc(6% + var(--dd,0) * 4%);
-              animation-range-end:entry calc(62% + var(--dd,0) * 4%)}
-        @keyframes riseX{from{opacity:0;translate:38px 0;filter:blur(7px)}}
-
         /* 지나간 화면은 뒤로 물러나며 다음 화면에 자리를 내준다 */
-        .slide > .inner{animation:recede linear both;animation-timeline:view(inline);
+        .slide > .inner{animation:recede linear both;animation-timeline:view();
                         animation-range:exit 0% exit 100%}
         @keyframes recede{to{opacity:.14;scale:.94}}
-        /* 이미지 : 왼쪽에서 오른쪽으로 닦인다 */
-        .shot{animation:wipeX linear both;animation-timeline:view(inline);
-              animation-range:entry 4% entry 84%}
-        @keyframes wipeX{from{clip-path:inset(0 100% 0 0);scale:1.05;opacity:.3}}
-        .tick{--v:var(--to);counter-reset:v var(--v);
-              animation:tick linear both;animation-timeline:view(inline);
-              animation-range:entry 20% entry 88%}
-        /* 표지 배경 숫자 : 오른쪽에서 밀려 들어와 제자리에 선다 */
+        /* 표지 배경 숫자 : 그 프로젝트가 가로로 들어올 때 밀려 들어와 제자리에 선다 */
         .cover .num-bg{animation:numIn linear both;animation-timeline:view(inline);
                        animation-range:entry 0% entry 100%}
         @keyframes numIn{from{opacity:0;translate:10vw -50%}to{opacity:1;translate:0 -50%}}
@@ -582,6 +565,7 @@
   @media print{
     html,body{block-size:auto;overflow:visible;background:#fff}
     .deck{display:block;block-size:auto;inline-size:auto;overflow:visible}
+    .chap{display:block;block-size:auto;inline-size:auto;overflow:visible}
     .slide{display:block;inline-size:auto;block-size:auto;overflow:visible;
            padding:1.2cm 1.4cm;break-after:page;background:#fff;color:#000}
     .slide:last-child{break-after:auto}
@@ -656,9 +640,9 @@
       <a href="#insuplus">인슈플러스</a><a href="#twoinone">투인원</a><a href="#yunoffice">윤사무실</a><a href="#stack">기술</a>
     </nav>
     <div class="here">
-      <button class="arrow" id="prev" type="button" aria-label="이전 화면">←</button>
+      <button class="arrow" id="prev" type="button" aria-label="이전 프로젝트" title="이전 프로젝트">←</button>
       <ol class="dots" id="dots" aria-label="이 섹션의 화면"></ol>
-      <button class="arrow" id="next" type="button" aria-label="다음 화면">→</button>
+      <button class="arrow" id="next" type="button" aria-label="다음 프로젝트" title="다음 프로젝트">→</button>
       <p class="count" id="count"></p>
     </div>
   </div>
@@ -668,6 +652,7 @@
 
 <main class="deck" id="deck">
 
+<div class="chap">
 <!-- 01 첫 화면 -->
 <section id="top" class="slide hero">
   <div class="inner">
@@ -694,14 +679,28 @@
 <!-- 02 숫자 -->
 <section class="slide invert" data-label="한눈에 보기">
   <div class="inner">
-    <ul class="figures rise">
-      <li><b><span class="tick" style="--to:4"></span>년 <span class="tick" style="--to:1"></span>개월</b><span>총 경력 · 3개 회사</span></li>
-      <li><b><span class="tick" style="--to:4"></span>년</b><span>PHP · Laravel 백엔드<br>레거시 유지보수와 신규 개발을 함께</span></li>
-      <li><b><span class="tick" style="--to:2"></span>년 <span class="tick" style="--to:3"></span>개월</b><span>Java · Spring Boot 백엔드<br>JSP · Spring 시절부터</span></li>
+    <p class="eyebrow rise">한눈에 보기</p>
+    <p class="bignum rise"><span class="tick" style="--to:4"></span>년 <span class="tick" style="--to:1"></span>개월</p>
+    <p class="lead rise mt-s">2022.04 — 2026.07 · 3개 회사, 그리고 프리랜스로 병행한 기간</p>
+    <ul class="lanes mt-l">
+      <li class="rise">
+        <span class="lane-k">PHP · Laravel</span>
+        <span class="lane-b"><i style="--to:100"></i></span>
+        <span class="lane-v">네 곳 모두 · 2022.04 — 2026.07</span>
+      </li>
+      <li class="rise j">
+        <span class="lane-k">Java · Spring Boot</span>
+        <span class="lane-b"><i style="--to:50"></i></span>
+        <span class="lane-v">앞의 두 곳 · 2022.04 — 2024.05</span>
+      </li>
     </ul>
+    <p class="small mt-m rise">두 스택을 이어서 쓴 게 아니라 겹쳐서 썼습니다. 같은 시기에 Java 백엔드와 PHP 서비스를 함께 맡은 기간이 있어, 두 기간을 더하면 총 경력보다 길어집니다.</p>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 03 경력 -->
 <section id="career" class="slide">
   <div class="inner">
@@ -713,7 +712,7 @@
         <div class="who">모바일파트너스</div>
         <div class="what">책임연구원 · 1년 10개월 · 자체 솔루션</div>
         <div class="stk"><span class="p">PHP · Laravel</span><span class="e">Next.js · Go</span></div>
-        <p class="body-2">모바일 앱 운영 B2B SaaS AppBox의 본 서비스를 <b>Laravel 11</b>로 1년 9개월간 개발·운영했습니다. 이후 같은 시스템을 Next.js + Go 구조로 서비스 중단 없이 옮겼고, 새 구조는 제가 맡아 만들었습니다. GPS 실시간 채팅 돌콩의 채팅 서버와 백오피스도 맡았습니다.</p>
+        <p class="body-2">모바일 앱 운영 B2B SaaS AppBox의 본 서비스를 <b>Laravel 11</b>로 1년 9개월간 개발·운영했습니다. 이후 같은 시스템을 Next.js + Go 구조로 서비스 중단 없이 옮겼고, 새 구조는 맡아서 만들었습니다. GPS 실시간 채팅 돌콩의 채팅 서버와 백오피스도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2025.03 — 2026.01</div>
@@ -727,7 +726,7 @@
         <div class="who">코드아이디어</div>
         <div class="what">주임 · 1년 1개월 · SI</div>
         <div class="stk"><span class="j">Java · Spring Boot</span><span class="p">PHP · Laravel</span></div>
-        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>(첫 커밋부터 제가 작성). 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
+        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>. 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2022.04 — 2023.05</div>
@@ -739,14 +738,17 @@
     </ul>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 04 AppBox 표지 -->
 <section id="appbox" class="slide cover tint">
   <div class="inner">
     <span class="num-bg" aria-hidden="true">01</span>
     <p class="eyebrow rise">01 — AppBox</p>
     <h2 class="h2 rise">웹사이트를 앱으로<br>만들고 운영합니다</h2>
-    <p class="lead rise">앱 빌드부터 푸시·인앱 메시지, 구독 결제까지 처리하는 B2B SaaS입니다. 기존 시스템은 팀으로 운영하고, 새 구조는 제가 맡아 만들었습니다.</p>
+    <p class="lead rise">앱 빌드부터 푸시·인앱 메시지, 구독 결제까지 처리하는 B2B SaaS입니다. 기존 시스템은 팀으로 운영하고, 새 구조는 맡아서 만들었습니다.</p>
     <p class="mono rise">모바일파트너스 · 책임연구원 · 2024.09 – 2026.07</p>
   </div>
 </section>
@@ -830,7 +832,7 @@
     <p class="eyebrow rise">본 서비스 — Laravel 11 · 1년 9개월</p>
     <h3 class="h3 rise">“레거시”라고 불렀지만<br>매일 돌아가던 제품이었습니다</h3>
     <ul class="results mt-m rise">
-      <li><b>1년 9개월</b><span>2024.10 – 2026.06 연속 커밋</span></li>
+      <li><b>1년 9개월</b><span>2024.10 – 2026.06 개발·운영</span></li>
     </ul>
     <dl class="spec spec-tight mt-m rise">
       <dt>Laravel 11 · PHP 8.2</dt><dd>컨트롤러 · 서비스 · 미들웨어 · 마이그레이션 · 라우트 · Blade 뷰까지 애플리케이션 전 계층을 직접 다뤘습니다</dd>
@@ -844,7 +846,7 @@
 <section class="slide tint">
   <div class="inner">
     <p class="eyebrow rise">레거시 무중단 점진 이관</p>
-    <h2 class="h2 rise" style="max-inline-size:20ch">한 번에 바꾸면<br>실패가 곧 장애가 됩니다</h2>
+    <h2 class="h2 rise" style="max-inline-size:20ch">한 번에 갈아엎지 않고<br>나눠서 옮겼습니다</h2>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">저장소를 성격으로 나눴다</h3><p class="body-2 mt-s">관계·정합성은 <b>PostgreSQL</b>, 디바이스·이벤트처럼 쓰기가 많고 스키마가 흔들리는 것은 <b>MongoDB</b>로 옮겼습니다. Redis는 <b>캐시와 큐를 별도 인스턴스로</b> 갈랐습니다 — 큐가 캐시 eviction에 쓸려가면 발송이 그대로 증발하기 때문입니다.</p></div>
       <div class="rise"><h3 class="h3">접수와 발송을 떼어냈다</h3><p class="body-2 mt-s">API는 요청을 <b>대기열에 쌓아 두기만</b> 하고, 별도 서버의 프로그램이 하나씩 꺼내 발송합니다. 대기열 전용 제품(Kafka·RabbitMQ) 대신 Redis를 쓴 건, 이미 캐시로 쓰고 있어 <b>운영할 서버를 늘리지 않기</b> 위해서였습니다.</p></div>
@@ -921,7 +923,7 @@
 <section class="slide tint">
   <div class="inner">
     <p class="eyebrow rise">데이터 설계</p>
-    <h2 class="h2 rise" style="max-inline-size:40ch;font-size:var(--t-h3)">이미 결제한 달은 흔들리면 안 됩니다</h2>
+    <h2 class="h2 rise" style="max-inline-size:40ch;font-size:var(--t-h3)">결제 시점의 제공량을 복사해 두었습니다</h2>
     <figure class="dia-wrap mt-l rise">
       <svg class="dia" viewBox="0 0 880 178" role="img"
            aria-label="제공량은 플랜을 참조하지 않고 결제 시점에 복사한다. 이후 플랜을 수정해도 이미 발급된 제공량에는 소급되지 않는다">
@@ -1021,13 +1023,16 @@
     </dl>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 14 마켓해머 표지 -->
 <section id="markethammer" class="slide cover">
   <div class="inner">
     <span class="num-bg" aria-hidden="true">02</span>
     <p class="eyebrow rise">02 — 마켓해머</p>
-    <h2 class="h2 rise">웹과 앱이 같은 API를<br>부르게 만들었습니다</h2>
+    <h2 class="h2 rise">1세대 위에서 만들다<br>2세대를 새로 세웠습니다</h2>
     <p class="lead rise">기업 간 B2B 플랫폼의 Java · Spring Boot 백엔드입니다. 운영 중인 1세대 시스템에서 기능을 만들다, 마지막에는 같은 서비스를 Java 17 · Spring Boot 3 구조로 다시 세웠습니다.</p>
     <p class="mono rise">코드아이디어 · 주임 · 2023.05 – 2024.05</p>
   </div>
@@ -1098,9 +1103,9 @@
   <div class="inner">
     <p class="eyebrow rise">규모와 기여</p>
     <ul class="results mt-m rise">
-      <li><b>5주</b><span>PC v2 백엔드·프론트 — 첫 커밋부터 제가 작성</span></li>
+      <li><b>5주</b><span>PC v2 백엔드·프론트를 새로 세운 기간</span></li>
     </ul>
-    <p class="small mt-m rise" style="max-inline-size:84ch;color:var(--ink-2)"><b>기여를 나눠서 말하면 이렇습니다</b> — v1(2023.05–2024.04)에서는 팀의 한 명이었고, 모바일 v2는 팀과 나눠 맡았으며, <b>PC v2는 2024.04 첫 커밋부터 2024.05까지 5주간 제가 작성</b>했습니다. 어디까지가 팀이고 어디부터가 저인지 저장소로 확인할 수 있습니다.</p>
+    <p class="small mt-m rise" style="max-inline-size:84ch;color:var(--ink-2)"><b>기여를 나눠서 말하면 이렇습니다</b> — v1(2023.05–2024.04)에서는 팀의 한 명이었고, 모바일 v2는 팀과 나눠 맡았으며, <b>PC v2는 2024.04부터 2024.05까지 5주간 맡아 새로 세웠습니다</b>. 어디까지가 팀이고 어디부터가 담당 몫인지 저장소로 확인할 수 있습니다.</p>
     <hr class="hair mt-l">
     <dl class="spec spec-tight mt-m rise">
       <dt>맡은 기능</dt><dd>웹·앱 공용 RESTful API 설계 · 기업 간 채팅과 푸시 알림 · <b>기업별 구독 플랜과 구독 상태 관리</b> · Quartz 배치 · Flutter WebView 앱 패킹</dd>
@@ -1108,13 +1113,16 @@
     </dl>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 17 돌콩 표지 -->
 <section id="dolkong" class="slide cover">
   <div class="inner">
     <span class="num-bg" aria-hidden="true">03</span>
     <p class="eyebrow rise">03 — 돌콩</p>
-    <h2 class="h2 rise">반경 5km,<br>지금 여기의 대화</h2>
+    <h2 class="h2 rise">GPS 위치로 열리는<br>실시간 채팅입니다</h2>
     <p class="lead rise">GPS 기반 실시간 위치 채팅 서비스입니다. 핵심 문제는 프로세스를 여러 개로 늘려도 같은 이벤트를 모두에게 전달하는 것이었습니다.</p>
     <p class="mono rise">모바일파트너스 · 2026.03 – 2026.07 · 채팅 서버와 운영 백오피스 구축</p>
   </div>
@@ -1239,13 +1247,16 @@
     </dl>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 20 인슈플러스 표지 -->
 <section id="insuplus" class="slide cover tint">
   <div class="inner">
     <span class="num-bg" aria-hidden="true">04</span>
     <p class="eyebrow rise">04 — 인슈플러스 · 플라잉닥터스</p>
-    <h2 class="h2 rise">실제 돈이 오가는 PHP 레거시를<br>두 번에 걸쳐 맡았습니다</h2>
+    <h2 class="h2 rise">같은 PHP 서비스를<br>두 번에 걸쳐 맡았습니다</h2>
     <p class="lead rise">해외여행자보험 B2C 서비스입니다. 재직 중에는 <b>PG 결제 모듈을 교체</b>했고, 퇴사한 뒤 같은 서비스를 위탁받아 <b>11개월간 운영하며 ISMS-P 인증 요건을 반영</b>했습니다.</p>
     <p class="mono rise">PHP 레거시 · MySQL · AWS EC2 · 이니시스 / 토스페이먼츠 · 카카오 알림톡</p>
   </div>
@@ -1269,7 +1280,7 @@
 <section class="slide tint" data-label="PG 결제 모듈 교체">
   <div class="inner">
     <p class="eyebrow rise">PG 이관</p>
-    <h2 class="h2 rise" style="max-inline-size:26ch">결제는 멈추면 그 자리에서<br>돈이 틀어집니다</h2>
+    <h2 class="h2 rise" style="max-inline-size:26ch">운영 중인 결제 모듈을<br>끊지 않고 교체했습니다</h2>
     <p class="lead rise">운영 중인 서비스의 결제 모듈을 <b>흐름을 끊지 않고</b> 교체했습니다. 기존 결제 흐름과 시스템 구조를 먼저 읽은 뒤에 손댔습니다.</p>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">먼저 읽었습니다</h3><p class="body-2 mt-s">기존 PG 연동이 어디서 시작해 어디로 끝나는지, 상태값이 어느 시점에 바뀌는지를 훑었습니다. <b>결제는 되돌릴 수 없는 작업</b>이라 바꾸기 전에 경로를 다 알아야 했습니다.</p></div>
@@ -1287,7 +1298,7 @@
 <section id="isms" class="slide tint">
   <div class="inner">
     <p class="eyebrow rise">프리랜스 · 여행보험 B2C</p>
-    <h2 class="h2 rise" style="max-inline-size:22ch">개인정보를 다루는 화면은<br>기능보다 통제가 먼저입니다</h2>
+    <h2 class="h2 rise" style="max-inline-size:22ch">ISMS-P 인증 요건을<br>운영 서버에 반영했습니다</h2>
     <p class="lead rise">전 소속사에서 담당하던 서비스를 퇴사 후 위탁받아 11개월간 유지보수하며, ISMS-P 인증 요건을 운영 서버에 반영했습니다.</p>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">노출 통제</h3><p class="body-2 mt-s">이름 · 주민번호 뒷자리 · 휴대전화를 <b>출력 단계에서 마스킹</b>하고, 복사 · 드래그를 차단했습니다. 검색 조건 없는 전체 조회를 막고, 쓰지 않는 관리자 게시판은 접근 자체를 닫았습니다.</p></div>
@@ -1313,7 +1324,10 @@
     <p class="small mt-m rise">로그인이 필요 없는 공개 화면만 담았습니다. 개인정보를 다루는 관리자 화면은 포함하지 않았습니다.</p>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 18 투인원 표지 -->
 <section id="twoinone" class="slide cover tint">
   <div class="inner">
@@ -1343,7 +1357,7 @@
 <section class="slide tint">
   <div class="inner">
     <p class="eyebrow rise">직접 부딪힌 문제</p>
-    <h2 class="h2 rise" style="max-inline-size:22ch;font-size:var(--t-h3)">직접 만들면 어느 층위든 내가 고쳐야 합니다</h2>
+    <h2 class="h2 rise" style="max-inline-size:22ch;font-size:var(--t-h3)">만들면서 부딪힌 문제 세 가지</h2>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">층위를 고르는 문제 해결</h3><p class="body-2 mt-s">"한 사람은 한 커플에만 속한다"를 앱 코드에서 검사했더니, 두 요청이 동시에 들어올 때 규칙이 깨졌습니다. 코드를 더 조이는 대신 <b>데이터베이스가 두 번째 저장을 직접 거절</b>하도록 조건을 걸었습니다. 문제를 어느 층위에서 풀지 고르는 것이 절반입니다.</p></div>
       <div class="rise"><h3 class="h3">릴리스에서만 터지는 크래시</h3><p class="body-2 mt-s">디버그는 멀쩡한데 릴리스만 부팅 즉시 죽었습니다. 원인은 코드가 아니라 <b>빌드 설정</b>이었습니다 — 빌드 도구가 "쓰이지 않는다"고 판단해 지운 클래스를, 앱이 실행 중에 이름으로 찾고 있었습니다. 개발 환경의 초록불은 프로덕션을 보장하지 않습니다.</p></div>
@@ -1413,7 +1427,7 @@
           <marker id="a5e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-em" d="M0,0 L10,5 L0,10 z"/></marker>
         </defs>
         <rect class="bx" x="8" y="26" width="176" height="44" rx="7"/>
-        <text x="96" y="46" text-anchor="middle">혼자 쓸 때</text>
+        <text x="96" y="46" text-anchor="middle">개인 사용</text>
         <text class="t-sub" x="96" y="61" text-anchor="middle">ownerScope = user</text>
 
         <rect class="bx" x="8" y="112" width="176" height="44" rx="7"/>
@@ -1444,13 +1458,16 @@
     </dl>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 26 윤사무실 표지 -->
 <section id="yunoffice" class="slide cover">
   <div class="inner">
     <span class="num-bg" aria-hidden="true">06</span>
     <p class="eyebrow rise">06 — 윤사무실</p>
-    <h2 class="h2 rise">지어내지 않는 구조로<br>에이전트를 관찰합니다</h2>
+    <h2 class="h2 rise">AI 에이전트의 활동을<br>실시간으로 관제합니다</h2>
     <p class="lead rise">AI 코딩 에이전트의 활동을 실시간으로 관제하는 데스크톱 앱입니다. 에이전트가 하는 일을 픽셀 사무실 화면에 공간으로 배치했습니다.</p>
     <p class="mono rise">개인 프로젝트 · Electron · 런타임 의존성 없음</p>
   </div>
@@ -1505,7 +1522,7 @@
 <section class="slide">
   <div class="inner">
     <p class="eyebrow rise">검증 결과</p>
-    <h3 class="h3 rise mt-s" style="max-inline-size:30ch">빠르게 만들되<br>검증 장치를 같이 만듭니다</h3>
+    <h3 class="h3 rise mt-s" style="max-inline-size:30ch">제품 코드와 검사를<br>같이 만들었습니다</h3>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">검사를 같이 짰습니다</h3><p class="body-2 mt-s">기능만 먼저 쌓지 않고 <b>제품 코드와 나란히 자동 검사</b>를 만들었습니다. 빠르게 바꾸면서도 무너지지 않으려면 이쪽이 먼저 서 있어야 했습니다.</p></div>
       <div class="rise"><h3 class="h3">검사도 의심했습니다</h3><p class="body-2 mt-s">일부러 결함을 심어 검사가 실제로 잡아내는지 확인했습니다. <b>통과만 하고 아무것도 잡지 않는 검사</b>를 그렇게 걸러냈습니다.</p></div>
@@ -1513,8 +1530,8 @@
     </div>
     <hr class="hair mt-l">
     <p class="eyebrow rise mt-l">스스로 지운 것</p>
-    <h3 class="h3 rise mt-s" style="max-inline-size:36ch">정확하지 않은 지표는 없느니만 못합니다</h3>
-    <p class="body-2 mt-s rise" style="max-inline-size:78ch;color:var(--ink-2)">사용량 게이지를 만들어 붙였는데, 재는 기간도 분모도 값도 실제 도구의 화면과 전부 달랐습니다. 한도가 아닌 것을 한도처럼 보이게 만든 셈이라 <b>기능을 통째로 걷어냈고</b>, 되돌아오지 못하도록 검사를 심었습니다. 만든 것을 지우는 판단까지가 제 몫이라고 봅니다.</p>
+    <h3 class="h3 rise mt-s" style="max-inline-size:36ch">지표가 실제와 달라 기능을 걷어냈습니다</h3>
+    <p class="body-2 mt-s rise" style="max-inline-size:78ch;color:var(--ink-2)">사용량 게이지를 만들어 붙였는데, 재는 기간도 분모도 값도 실제 도구의 화면과 전부 달랐습니다. 한도가 아닌 것을 한도처럼 보이게 만든 셈이라 <b>기능을 통째로 걷어냈고</b>, 되돌아오지 못하도록 검사를 심었습니다. 만든 것을 지우는 판단까지가 개발자의 몫이라고 봅니다.</p>
     <dl class="spec mt-l rise">
       <dt>기술</dt><dd>Electron · Node.js · Python</dd>
     </dl>
@@ -1570,7 +1587,10 @@
     </dl>
   </div>
 </section>
+</div>
 
+
+<div class="chap">
 <!-- 32 기술 스택 -->
 <section id="stack" class="slide tint">
   <div class="inner">
@@ -1593,7 +1613,7 @@
 <section id="contact" class="slide end">
   <div class="inner">
     <p class="eyebrow rise">Contact</p>
-    <h2 class="h2 rise">문제를 찾아 정의하고, 구조로 해결하며, 변경의 결과까지 책임지겠습니다.</h2>
+    <h2 class="h2 rise">여기까지 봐 주셔서<br>감사합니다.</h2>
     <div class="row rise">
       <a class="pill" href="mailto:yjhzzzzdev@gmail.com">yjhzzzzdev@gmail.com</a>
       <a class="pill line" href="윤정현_이력서.pdf" target="_blank" rel="noopener">이력서 PDF</a>
@@ -1611,6 +1631,7 @@
     <p class="meta rise">© 2026 윤정현</p>
   </div>
 </section>
+</div>
 
 </main>
 
@@ -1631,16 +1652,27 @@
   const live   = document.getElementById('live');
   const prev  = document.getElementById('prev');
   const next  = document.getElementById('next');
-  const slides = [...deck.children];
+  const chaps  = [...deck.children];                       // 프로젝트 한 칸
+  const slides = [...deck.querySelectorAll(':scope > .chap > section')];
+  const chapOf = slides.map(sl => chaps.indexOf(sl.parentElement));
   const wide   = matchMedia('(min-width: 64rem)');
   const still  = matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ── 좌우 이동 ───────────────────────────── */
-  const index = () => {
+  /* ── 이동 ─────────────────────────────────
+     넓은 화면은 두 축이다. 가로는 프로젝트를 고르고, 세로는 그 안을 넘긴다. */
+  const chapAt = () => {
     const x = deck.scrollLeft;
     let best = 0, gap = Infinity;
-    slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft - x); if (d < gap) { gap = d; best = i; } });
+    chaps.forEach((c, i) => { const d = Math.abs(c.offsetLeft - x); if (d < gap) { gap = d; best = i; } });
     return best;
+  };
+  /* 서 있는 칸 안에서 몇 번째인가 — 전체 순번으로 돌려준다 */
+  const index = () => {
+    const c = chaps[chapAt()];
+    const y = c.scrollTop;
+    let best = c.firstElementChild, gap = Infinity;
+    for (const sl of c.children) { const d = Math.abs(sl.offsetTop - y); if (d < gap) { gap = d; best = sl; } }
+    return slides.indexOf(best);
   };
   /* 지금 몇 번째 장인가 — 가로/세로 양쪽 */
   const at = () => {
@@ -1652,39 +1684,81 @@
     if (n < 0) n = scrollY < 10 ? 0 : slides.length - 1;
     return n;
   };
+  const curChap = () => wide.matches ? chapAt() : chapOf[at()];
+  /* 스냅이 걸린 안쪽 스크롤은 프로그램에서 부드럽게 굴러가지 않는다 —
+     굴리는 동안만 스냅을 풀고, 멈추면 되돌린다.
+     되돌리는 시점이 이르면 굴러가던 스크롤이 중간에서 멈춘다. */
+  const snapBack = c => {
+    if (!c._back) return;
+    clearTimeout(c._snap);
+    c.removeEventListener('scrollend', c._back);
+    c._back = null;
+    c.style.scrollSnapType = '';
+  };
+  const softScroll = (c, top, how) => {
+    snapBack(c);
+    if (how !== 'smooth') { c.scrollTop = top; return; }
+    c.style.scrollSnapType = 'none';
+    c._back = () => snapBack(c);
+    c.addEventListener('scrollend', c._back);
+    c._snap = setTimeout(c._back, 1600);
+    c.scrollTo({ top, behavior: 'smooth' });
+  };
   const goTo = i => {
     const n = Math.min(Math.max(i, 0), slides.length - 1);
     /* 멀리 뛸 때 부드러운 스크롤은 몇 초씩 걸린다 — 3장을 넘으면 즉시 이동 */
     const far = Math.abs(n - at()) > 3;
     const how = (far || still.matches) ? 'auto' : 'smooth';
-    if (wide.matches) deck.scrollTo({ left: slides[n].offsetLeft, behavior: how });
-    else slides[n].scrollIntoView({ behavior: how, block: 'start' });
+    if (wide.matches) {
+      const c = slides[n].parentElement, same = c === chaps[chapAt()];
+      /* 다른 칸으로 건너뛸 땐 세로 위치를 먼저 즉시 맞춘다 —
+         가로로 미끄러지는 동안 세로까지 흐르면 어지럽다 */
+      softScroll(c, slides[n].offsetTop, same ? how : 'auto');
+      deck.scrollTo({ left: c.offsetLeft, behavior: same ? 'auto' : how });
+    } else slides[n].scrollIntoView({ behavior: how, block: 'start' });
   };
   const step = dir => goTo(at() + dir);
+  /* 프로젝트 단위 이동 — 새 프로젝트는 표지부터 연다 */
+  const goChap = dir => {
+    const i = Math.min(Math.max(curChap() + dir, 0), chaps.length - 1);
+    const c = chaps[i];
+    if (!wide.matches) { goTo(slides.indexOf(c.firstElementChild)); return; }
+    softScroll(c, 0, 'auto');
+    deck.scrollTo({ left: c.offsetLeft, behavior: still.matches ? 'auto' : 'smooth' });
+  };
 
   let lock = 0;
   deck.addEventListener('wheel', e => {
     if (!wide.matches || dlg.open) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;   // 트랙패드 좌우 제스처는 그대로 둔다
-    e.preventDefault();
     if (Math.abs(e.deltaY) < 4) return;
-    const now = e.timeStamp;
+    const now = e.timeStamp, dir = Math.sign(e.deltaY);
+    /* 막을 수 없는 휠이면 세로는 브라우저에 맡기고,
+       칸의 위아래 끝에 닿았을 때만 옆 칸으로 넘겨 준다 */
+    if (!e.cancelable) {
+      const c = chaps[chapAt()];
+      const top = c.scrollTop <= 1;
+      const bot = c.scrollTop >= c.scrollHeight - c.clientHeight - 1;
+      if (!((dir > 0 && bot) || (dir < 0 && top))) return;
+    } else e.preventDefault();
     if (now < lock) return;
     lock = now + 620;
-    step(Math.sign(e.deltaY));
+    step(dir);
   }, { passive: false });
 
   addEventListener('keydown', e => {
     if (dlg.open || e.metaKey || e.ctrlKey || e.altKey || !wide.matches) return;
     const k = e.key;
-    if (k === 'ArrowRight' || k === 'PageDown')   { e.preventDefault(); step(1); }
-    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); step(-1); }
+    if (k === 'ArrowDown' || k === 'PageDown')    { e.preventDefault(); step(1); }
+    else if (k === 'ArrowUp' || k === 'PageUp')   { e.preventDefault(); step(-1); }
+    else if (k === 'ArrowRight')                  { e.preventDefault(); goChap(1); }
+    else if (k === 'ArrowLeft')                   { e.preventDefault(); goChap(-1); }
     else if (k === 'Home')                        { e.preventDefault(); goTo(0); }
     else if (k === 'End')                         { e.preventDefault(); goTo(slides.length - 1); }
   });
 
-  prev.addEventListener('click', () => step(-1));
-  next.addEventListener('click', () => step(1));
+  prev.addEventListener('click', () => goChap(-1));
+  next.addEventListener('click', () => goChap(1));
 
   /* 상단 내비 · 이름 · 본문 바로가기 — 이동은 전부 goTo 로 (멀면 즉시 이동) */
   document.querySelectorAll('.bar a[href^="#"], a.skip').forEach(a => a.addEventListener('click', e => {
@@ -1701,16 +1775,22 @@
   /* 탭 키로 화면 밖 요소에 초점이 가면 그 화면으로 맞춰 세운다 */
   addEventListener('focusin', e => {
     if (!wide.matches) return;
-    const s = e.target.closest?.('#deck > section');
+    const s = e.target.closest?.('#deck .slide');
     if (s) { const i = slides.indexOf(s); if (i >= 0 && i !== index()) goTo(i); }
   });
 
   /* 주소에 #이 붙은 채로 열리면 그 화면부터 */
   const openAt = () => {
     if (!location.hash) return;
-    const t = document.querySelector(location.hash);
+    /* 주소가 깨진 채로 열릴 수도 있다 — 선택자가 아니면 그냥 첫 장부터 */
+    let t = null;
+    try { t = document.querySelector(location.hash); } catch (_) { return; }
     const i = t ? slides.indexOf(t) : -1;
-    if (i > 0 && wide.matches) deck.scrollTo({ left: slides[i].offsetLeft, behavior: 'auto' });
+    if (i > 0 && wide.matches) {
+      const c = slides[i].parentElement;
+      c.scrollTop = slides[i].offsetTop;
+      deck.scrollLeft = c.offsetLeft;
+    }
   };
   addEventListener('load', openAt);
   openAt();
@@ -1787,8 +1867,9 @@
     ticking = false;
     const n = at();
     count.textContent = String(n + 1).padStart(2, '0') + ' / ' + slides.length;
-    prev.disabled = n === 0;
-    next.disabled = n === slides.length - 1;
+    const ci = curChap();
+    prev.disabled = ci === 0;
+    next.disabled = ci === chaps.length - 1;
     if (n !== lastN) {
       live.textContent = (n + 1) + ' / ' + slides.length + ' ' + labels[n];
       lastN = n;
@@ -1840,7 +1921,8 @@
   const hint = document.getElementById('hint');
   const retire = () => {
     if (!hint || hint.dataset.done) return;
-    if (deck.scrollLeft > 24 || scrollY > 24) hint.dataset.done = '1';
+    if (deck.scrollLeft > 24 || scrollY > 24 || chaps.some(c => c.scrollTop > 24))
+      hint.dataset.done = '1';
   };
 
   const onScroll = () => {
@@ -1849,8 +1931,10 @@
     if (!ticking) { ticking = true; requestAnimationFrame(paint); }
   };
   deck.addEventListener('scroll', onScroll, { passive: true });
+  /* 스크롤 이벤트는 거슬러 오르지 않는다 — 칸마다 따로 듣는다 */
+  chaps.forEach(c => c.addEventListener('scroll', onScroll, { passive: true }));
   addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', () => { if (wide.matches) goTo(index()); paint(); });
+  addEventListener('resize', () => { if (wide.matches) goTo(at()); paint(); });
   paint();
 
   /* ── 확대 보기 ───────────────────────────── */
