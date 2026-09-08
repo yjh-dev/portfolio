@@ -156,6 +156,9 @@
   .hero .role{margin-block-start:clamp(.7rem,1.6vh,1.15rem);
               font-size:clamp(1.05rem,min(1.5vw,2.4svh),1.6rem);
               font-weight:560;letter-spacing:-.02em;color:var(--ink-2)}
+  /* 이력서의 한 줄 소개 — 직무 아래에 한 칸 낮춰 둔다 */
+  .hero .tag{margin-block-start:clamp(.35rem,.9vh,.6rem);max-inline-size:40ch;
+             font-size:var(--t-small);color:var(--ink-3);text-wrap:balance}
   .hero .spec.card{gap:.65rem 2.5rem;max-inline-size:44rem}
   .hero .spec.card dt{color:var(--ink-3)}
   .hero .spec.card dd{color:var(--ink)}
@@ -736,11 +739,12 @@
       <span class="ln" style="--i:0"><i>윤정현</i></span>
     </h1>
     <p class="role fadeUp" style="--i:0">백엔드 · 풀스택 개발자</p>
+    <p class="tag fadeUp" style="--i:0">주력 스택으로 운영 중인 시스템을 멈추지 않고 구조를 바꿔 왔습니다</p>
     <div class="foot">
       <dl class="spec card fadeUp" style="--i:1">
         <dt>경력</dt><dd>4년 1개월 · 2022.04 – 2026.07</dd>
         <dt>주력</dt><dd><span class="stk"><span class="p">PHP · Laravel</span><span class="j">Java · Spring Boot</span></span></dd>
-        <dt>교육</dt><dd>DBMS기반 빅데이터 응용 SW개발자 전문과정<br><span class="sub">중앙정보처리학원 · 2018.08 – 2019.03</span></dd>
+        <dt>교육</dt><dd>DBMS기반 빅데이터 응용 SW개발자 전문과정<br><span class="sub">중앙정보처리학원 · 2018.08 – 2019.03 · 22주</span></dd>
         <dt>이메일</dt><dd><a class="ln-a" href="mailto:yjhzzzzdev@gmail.com">yjhzzzzdev@gmail.com</a></dd>
         <dt>GitHub</dt><dd><a class="ln-a" href="https://github.com/yjh-dev" target="_blank" rel="noopener">github.com/yjh-dev</a></dd>
       </dl>
@@ -801,14 +805,14 @@
         <div class="who">코드아이디어</div>
         <div class="what">주임 · 1년 1개월 · SI</div>
         <div class="stk"><span class="j">Java · Spring Boot</span><span class="p">PHP · Laravel</span></div>
-        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>. 여행보험 PG 결제 모듈 교체와 Laravel 10 기반 고객사 웹 서비스도 맡았습니다.</p>
+        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>. 여행보험 PG 결제 모듈 교체와 <b>Laravel 10 고객사 웹 2건</b>도 팀과 나눠 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2022.04 — 2023.05</div>
         <div class="who">비젠소프트</div>
-        <div class="what">사원 · 1년 2개월 · 웹에이전시</div>
+        <div class="what">일반사원 · 1년 2개월 · 웹에이전시</div>
         <div class="stk"><span class="j">Java · JSP · Spring</span><span class="p">PHP 레거시</span></div>
-        <p class="body-2"><b>JSP · Spring</b>과 PHP 레거시로 사내 ERP, 장비 예약, 전자계약 등 고객사 웹 서비스 6건을 개발했습니다. 남이 쓴 레거시 코드를 읽고 고치는 훈련을 이때 했습니다.</p>
+        <p class="body-2"><b>JSP · Spring</b>과 PHP 레거시로 ERP, 장비 예약, 전자계약, 커뮤니티, 공시·재무 조회, 제품 관리 백오피스까지 고객사 웹 서비스 6건을 개발했습니다. 남이 쓴 레거시 코드를 읽고 고치는 훈련을 이때 했습니다.</p>
       </li>
     </ul>
   </div>
@@ -920,7 +924,7 @@
 <!-- 10 AppBox 이관 판단 -->
 <section class="slide tint">
   <div class="inner">
-    <p class="eyebrow rise">레거시 무중단 점진 이관</p>
+    <p class="eyebrow rise">레거시 무중단 점진 이관 · 2026.03 – 2026.07</p>
     <h2 class="h2 rise" style="max-inline-size:20ch">한 번에 갈아엎지 않고<br>나눠서 옮겼습니다</h2>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">저장소를 성격으로 나눴다</h3><p class="body-2 mt-s">서로 이어지고 앞뒤가 맞아야 하는 것은 <b>PostgreSQL</b>, 기기·이벤트처럼 쓰기가 잦고 저장할 모양이 자주 바뀌는 것은 <b>MongoDB</b>로 옮겼습니다. Redis는 <b>캐시와 대기열을 서로 다른 곳에</b> 갈랐습니다 — 캐시는 자리가 모자라면 오래된 값을 스스로 지우는데, 대기열을 같이 두면 보내야 할 알림까지 함께 사라지기 때문입니다.</p></div>
@@ -1168,7 +1172,7 @@
         <path class="fl" d="M501,132 V144" marker-end="url(#a7)"/>
         <path class="fl" d="M742,132 V144" marker-end="url(#a7)"/>
       </svg>
-      <figcaption><b>v1은 화면·API·배치가 한 애플리케이션에 있었고, 데이터 접근이 JPA·JDBC·MyBatis 세 갈래로 갈려 있었습니다.</b> 같은 테이블을 세 방식으로 읽으니 고칠 때마다 어디를 건드려야 하는지부터 찾아야 했습니다. v2에서는 화면 서버와 API 서버를 갈라 PC·모바일이 각자 배포되게 하고, 데이터 접근을 <b>MyBatis 하나로 통일</b>했으며, 세션 인증을 <code>Spring Security</code> + JWT로 바꿨습니다.</figcaption>
+      <figcaption><b>v1은 화면·API·배치가 한 애플리케이션에 있었고, 데이터 접근이 JPA·JDBC·MyBatis 세 갈래로 갈려 있었습니다.</b> 같은 테이블을 세 방식으로 읽으니 고칠 때마다 어디를 건드려야 하는지부터 찾아야 했습니다. v2에서는 화면 서버와 API 서버를 갈라 PC·모바일이 각자 배포되게 하고, 데이터 접근을 <b>MyBatis 하나로 통일</b>했으며, 세션 인증을 <code>Spring Security</code> + JWT로 바꿨습니다. PC·모바일을 각각 화면 서버와 API 서버로 나눠 <b>배포 단위를 넷으로</b> 갈랐습니다 — 한쪽 배포가 다른 쪽을 멈추지 않게 하려는 것이었습니다.</figcaption>
     </figure>
   </div>
 </section>
@@ -1199,7 +1203,7 @@
     <p class="eyebrow rise">03 — 돌콩</p>
     <h2 class="h2 rise">GPS 위치로 열리는<br>실시간 채팅입니다</h2>
     <p class="lead rise">핵심 문제는 <b>서버를 여러 개로 늘려도</b> 같은 메시지가 모두에게 가게 하는 것이었습니다.</p>
-    <p class="mono rise">모바일파트너스 · 2026.03 – 2026.07 · 채팅 서버와 운영 백오피스 구축</p>
+    <p class="mono rise">모바일파트너스 · 2026.03 – 2026.07 · 4개월 · 채팅 서버 · 운영 백오피스 · 인프라</p>
   </div>
 </section>
 
@@ -1377,11 +1381,11 @@
     <p class="lead rise">전 소속사에서 담당하던 서비스를 퇴사 후 위탁받아 <b>11개월간 유지보수</b>했습니다.</p>
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">노출 통제</h3><p class="body-2 mt-s">이름 · 주민번호 뒷자리 · 휴대전화를 <b>출력 단계에서 마스킹</b>하고, 복사 · 드래그를 차단했습니다. 검색 조건 없는 전체 조회를 막고, 쓰지 않는 관리자 게시판은 접근 자체를 닫았습니다.</p></div>
-      <div class="rise"><h3 class="h3">저장 · 반출 통제</h3><p class="body-2 mt-s">단체 가입 저장 시 <b>개인정보 컬럼이 암호화되지 않던 결함</b>을 찾아 고치고, 암호화 키를 환경별 설정으로 분리했습니다. 개인정보가 든 엑셀 · CSV 반출에는 암호화를 걸었습니다.</p></div>
+      <div class="rise"><h3 class="h3">저장 · 반출 통제</h3><p class="body-2 mt-s">단체 가입 저장 시 <b>개인정보 컬럼이 암호화되지 않던 결함</b>을 찾아 고치고, 암호화 키를 환경별 설정으로 분리했습니다. 개인정보가 든 엑셀 · CSV 반출에는 암호화를 걸었고, 대량 내려받기가 느려지던 것은 패키지 모듈을 갈아 해결했습니다.</p></div>
       <div class="rise"><h3 class="h3">접근 통제</h3><p class="body-2 mt-s">관리자 <b>동시접속을 제한</b>해 다른 브라우저로 로그인하면 기존 세션이 끊기게 했고, 접속 IP를 등록해 관리하도록 했습니다.</p></div>
     </div>
     <dl class="spec mt-l rise">
-      <dt>그 외</dt><dd>이니시스 · 토스페이먼츠 결제 전환, 가상계좌 자동전환 · 카드 취소 오류, 카카오 알림톡 발송 장애, 제휴사 전용 가입 페이지 3종, AWS EC2 운영 · SSL 갱신</dd>
+      <dt>그 외</dt><dd>이니시스 · 토스페이먼츠 결제 전환, 가상계좌 자동전환 · 카드 취소 오류, 카카오 알림톡 발송 장애, 제휴사 전용 가입 페이지 3종, 보험사 약관 개정분 반영, AWS EC2 운영 · SSL 갱신 · TLS 1.2 점검</dd>
       <dt>규모</dt><dd>2025.03 – 2026.01 · 11개월 · 유지보수 요청 60건 처리 · PHP 레거시</dd>
     </dl>
   </div>
@@ -1409,8 +1413,8 @@
     <span class="num-bg" aria-hidden="true">05</span>
     <p class="eyebrow rise">05 — 투인원</p>
     <h2 class="h2 rise">기획부터 운영까지,<br>양대마켓에 배포했습니다</h2>
-    <p class="lead rise">커플 미디어 앱입니다. 앱(Flutter)과 서버(NestJS), 인프라까지 담당했고 지금도 운영 중입니다.</p>
-    <p class="mono rise">개인 프로젝트 · 5개 배포 단위 · Flutter + NestJS · AWS EC2 · Cloudflare R2</p>
+    <p class="lead rise">커플 미디어 앱입니다. 앱(Flutter) · API(NestJS) · DB · AWS 인프라에 백오피스와 랜딩까지 담당했고 지금도 운영 중입니다.</p>
+    <p class="mono rise">개인 프로젝트 · 2026.06 – 운영 중 · 5개 배포 단위 · Flutter + NestJS · AWS EC2 · Cloudflare R2</p>
   </div>
 </section>
 
@@ -1544,7 +1548,7 @@
     <p class="eyebrow rise">06 — 윤사무실</p>
     <h2 class="h2 rise">AI 에이전트의 활동을<br>실시간으로 관제합니다</h2>
     <p class="lead rise">에이전트가 지금 무엇을 하고 있는지를 <b>픽셀 사무실 화면에 공간으로</b> 배치한 데스크톱 앱입니다.</p>
-    <p class="mono rise">개인 프로젝트 · Electron · 런타임 의존성 없음</p>
+    <p class="mono rise">개인 프로젝트 · 2026.07 – 2026.08 · Electron · 런타임 의존성 없음</p>
   </div>
 </section>
 
@@ -1678,7 +1682,8 @@
       <dt>백엔드</dt><dd>Spring Boot (MyBatis · JPA · Spring Security · Quartz) · Laravel (Eloquent · Artisan · Blade) · Echo(Go) · Express · NestJS</dd>
       <dt>프론트엔드 · 앱</dt><dd>Thymeleaf · Blade · jQuery &nbsp;/&nbsp; Next.js · React &nbsp;/&nbsp; Flutter · Electron</dd>
       <dt>데이터</dt><dd>MySQL · MariaDB · PostgreSQL · MongoDB · Redis</dd>
-      <dt>인프라 · 보안</dt><dd>Nginx · Docker · PM2 · systemd · AWS &nbsp;/&nbsp; Spring Security · JWT · AES-256 · 개인정보 마스킹·암호화</dd>
+      <dt>실시간</dt><dd>Socket.IO · SSE · Redis Stream · FCM</dd>
+      <dt>인프라 · 보안</dt><dd>Nginx · Docker · PM2 · systemd · AWS EC2 · S3 · GitHub Actions &nbsp;/&nbsp; Spring Security · JWT · AES-256 · 개인정보 마스킹·암호화 (ISMS-P 대응)</dd>
       <dt>대외 활동</dt><dd class="books"><img src="img/book-bitcoin.webp" width="400" height="514" loading="lazy" decoding="async" alt="조코딩의 AI 비트코인 자동 매매 시스템 만들기 표지"><img src="img/book-flutter.webp" width="400" height="546" loading="lazy" decoding="async" alt="코딩셰프의 플러터 맛집 표지"><span>「조코딩의 AI 비트코인 자동 매매 시스템 만들기」(한빛미디어)<br>「코딩셰프의 플러터 맛집」(루비페이퍼) — 기술 감수</span></dd>
     </dl>
   </div>
