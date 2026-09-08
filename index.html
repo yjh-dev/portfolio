@@ -1701,7 +1701,8 @@
     c.style.scrollSnapType = 'none';
     c._back = () => snapBack(c);
     c.addEventListener('scrollend', c._back);
-    c._snap = setTimeout(c._back, 1600);
+    /* 부드러운 스크롤이 아예 돌지 못하는 경우(숨은 탭 등)까지 자리를 맞춰 둔다 */
+    c._snap = setTimeout(() => { c.scrollTop = top; snapBack(c); }, 1600);
     c.scrollTo({ top, behavior: 'smooth' });
   };
   const goTo = i => {
