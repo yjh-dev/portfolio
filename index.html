@@ -547,8 +547,18 @@
   @media (width >= 64rem){
     @supports (animation-timeline:view()){
       @media (prefers-reduced-motion:no-preference){
+        /* 기준을 화면 한 장으로 옮긴다.
+           요소마다 제 위치를 재게 두면, 화면 아래쪽에 놓인 글은
+           스냅이 걸려 더 내려갈 곳이 없으므로 등장이 끝나지 않는다 —
+           흐릿한 채로 멈춘다. 화면이 기준이면 제자리에 선 순간 다 끝나 있다. */
+        .slide{view-timeline:--sl block}
+        .slide .rise,.slide .shot,.slide .tick,.slide .lane-b > i{animation-timeline:--sl}
+        /* 넘길 것이 없는 칸은 타임라인이 서지 않는다 — 등장을 아예 걸지 않는다 */
+        .chap > section:only-child .rise,
+        .chap > section:only-child .shot,
+        .chap > section:only-child .tick{animation:none}
         /* 지나간 화면은 뒤로 물러나며 다음 화면에 자리를 내준다 */
-        .slide > .inner{animation:recede linear both;animation-timeline:view();
+        .slide > .inner{animation:recede linear both;animation-timeline:--sl;
                         animation-range:exit 0% exit 100%}
         @keyframes recede{to{opacity:.14;scale:.94}}
         /* 표지 배경 숫자 : 그 프로젝트가 가로로 들어올 때 밀려 들어와 제자리에 선다 */
@@ -686,15 +696,14 @@
       <li class="rise">
         <span class="lane-k">PHP · Laravel</span>
         <span class="lane-b"><i style="--to:100"></i></span>
-        <span class="lane-v">네 곳 모두 · 2022.04 — 2026.07</span>
+        <span class="lane-v">비젠소프트 · 코드아이디어 · 모바일파트너스 · 프리랜스 &nbsp;·&nbsp; 2022.04 — 2026.07</span>
       </li>
       <li class="rise j">
         <span class="lane-k">Java · Spring Boot</span>
         <span class="lane-b"><i style="--to:50"></i></span>
-        <span class="lane-v">앞의 두 곳 · 2022.04 — 2024.05</span>
+        <span class="lane-v">비젠소프트 · 코드아이디어 &nbsp;·&nbsp; 2022.04 — 2024.05</span>
       </li>
     </ul>
-    <p class="small mt-m rise">두 스택을 이어서 쓴 게 아니라 겹쳐서 썼습니다. 같은 시기에 Java 백엔드와 PHP 서비스를 함께 맡은 기간이 있어, 두 기간을 더하면 총 경력보다 길어집니다.</p>
   </div>
 </section>
 </div>
@@ -726,7 +735,7 @@
         <div class="who">코드아이디어</div>
         <div class="what">주임 · 1년 1개월 · SI</div>
         <div class="stk"><span class="j">Java · Spring Boot</span><span class="p">PHP · Laravel</span></div>
-        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>. 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
+        <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>. 여행보험 PG 결제 모듈 교체와 Laravel 10 기반 고객사 웹 서비스도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2022.04 — 2023.05</div>
@@ -759,7 +768,7 @@
     <div>
       <p class="step rise">01 / 04</p>
       <h3 class="h3 rise">앱 빌드</h3>
-      <p class="body-2 mt-s rise">고객사 웹사이트를 클라우드에서 Android · iOS 앱으로 컴파일·패키징합니다. 빌드는 수 분이 걸려 웹 요청 안에서 처리할 수 없었습니다. <b>접수만 응답하고 실제 빌드는 큐로 넘겨</b> 웹 응답 시간과 분리했습니다.</p>
+      <p class="body-2 mt-s rise">고객사 웹사이트를 클라우드에서 Android · iOS 앱 파일로 만들어 냅니다. 빌드는 수 분이 걸려 웹 요청 안에서 처리할 수 없었습니다. <b>접수만 응답하고 실제 빌드는 대기열로 넘겨</b> 웹 응답 시간과 분리했습니다.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/ab-build.webp" width="1280" height="720" loading="lazy" decoding="async" alt="AppBox 앱 빌드 마법사 화면"></button>
@@ -774,7 +783,7 @@
     <div>
       <p class="step rise">02 / 04</p>
       <h3 class="h3 rise">푸시 메시지</h3>
-      <p class="body-2 mt-s rise">토큰 선택 · CSV 업로드 · 테스트 발송을 지원합니다. API는 요청을 <b>대기열에 쌓아 두기만</b> 하고, 실제 발송은 별도 서버의 프로그램이 하나씩 꺼내 처리합니다. 덕분에 외부 Push API를 붙일 때 <b>발송 파이프라인은 한 줄도 고치지 않았습니다</b>.</p>
+      <p class="body-2 mt-s rise">토큰 선택 · CSV 업로드 · 테스트 발송을 지원합니다. API는 요청을 <b>대기열에 쌓아 두기만</b> 하고, 실제 발송은 별도 서버의 프로그램이 하나씩 꺼내 처리합니다. 덕분에 외부 Push API를 붙일 때 <b>발송 쪽 코드는 한 줄도 고치지 않았습니다</b>.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/ab-push.webp" width="1280" height="720" loading="lazy" decoding="async" alt="AppBox 푸시 메시지 발송 화면"></button>
@@ -789,7 +798,7 @@
     <div>
       <p class="step rise">03 / 04</p>
       <h3 class="h3 rise">인앱 메시지</h3>
-      <p class="body-2 mt-s rise">위치 · 크기 · 딤 · 애니메이션을 설정하고 실시간으로 미리 봅니다. 캠페인 <b>메타는 PostgreSQL, 콘텐츠는 MongoDB</b>로 나눠 저장합니다 — 집계·정합성은 관계형이 유리하고, 자유로운 콘텐츠 구조는 스키마리스가 유리하기 때문입니다.</p>
+      <p class="body-2 mt-s rise">위치 · 크기 · 배경 어둡기 · 움직임을 설정하고 그 자리에서 미리 봅니다. 캠페인 <b>설정값은 PostgreSQL, 실제 내용은 MongoDB</b>에 나눠 담습니다 — 세고 맞춰 봐야 하는 값은 표로 정리된 쪽이, 모양이 매번 달라지는 내용은 틀이 없는 쪽이 다루기 쉽기 때문입니다.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/ab-inapp.webp" width="1280" height="720" loading="lazy" decoding="async" alt="AppBox 인앱 메시지 편집 화면"></button>
@@ -803,8 +812,8 @@
   <div class="inner">
     <div>
       <p class="step rise">04 / 04</p>
-      <h3 class="h3 rise">사용자 여정 · 토큰 적재</h3>
-      <p class="body-2 mt-s rise">SDK가 수집한 디바이스 토큰을 적재·갱신하고, 발송 대상 산출의 기준으로 씁니다. 여정 인스턴스는 <b>유저가 아니라 디바이스 단위</b>로 잡았습니다 — 한 사람이 기기를 여러 대 쓰면 발송 대상이 달라지기 때문입니다.</p>
+      <h3 class="h3 rise">사용자 여정 · 기기 주소 모으기</h3>
+      <p class="body-2 mt-s rise">앱에 넣은 SDK가 모아 온 기기 주소를 쌓고 갱신해, 누구에게 보낼지 고르는 기준으로 씁니다. 여정 기록은 <b>사람이 아니라 기기 단위</b>로 잡았습니다 — 한 사람이 기기를 여러 대 쓰면 발송 대상이 달라지기 때문입니다.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/ab-journey.webp" width="1280" height="720" loading="lazy" decoding="async" alt="AppBox 사용자 여정 캔버스"></button>
@@ -837,7 +846,7 @@
     <dl class="spec spec-tight mt-m rise">
       <dt>Laravel 11 · PHP 8.2</dt><dd>컨트롤러 · 서비스 · 미들웨어 · 마이그레이션 · 라우트 · Blade 뷰까지 애플리케이션 전 계층을 직접 다뤘습니다</dd>
       <dt>아티즌 커맨드</dt><dd>빌드·발송·정산 배치를 <b>스케줄러가 부르는 커맨드</b>로 떼어냈습니다 — 웹 요청과 배치가 같은 실행 경로를 쓰지 않게 한 자리입니다</dd>
-      <dt>이관과의 관계</dt><dd>Next.js·Go 구조는 이 코드를 버리고 다시 쓴 게 아니라 <b>여기서 알아낸 도메인을 옮긴 것</b>입니다. 구독 게이팅·인증 회귀 2건을 운영 반영 전에 잡을 수 있던 것도 원본을 알고 있었기 때문입니다</dd>
+      <dt>이관과의 관계</dt><dd>Next.js·Go 구조는 이 코드를 버리고 다시 쓴 게 아니라 <b>여기서 알아낸 도메인을 옮긴 것</b>입니다. 구독 차단·인증이 되돌아간 결함 2건을 운영에 나가기 전에 잡을 수 있던 것도 원본을 알고 있었기 때문입니다</dd>
     </dl>
   </div>
 </section>
@@ -848,9 +857,9 @@
     <p class="eyebrow rise">레거시 무중단 점진 이관</p>
     <h2 class="h2 rise" style="max-inline-size:20ch">한 번에 갈아엎지 않고<br>나눠서 옮겼습니다</h2>
     <div class="cols3 mt-l">
-      <div class="rise"><h3 class="h3">저장소를 성격으로 나눴다</h3><p class="body-2 mt-s">관계·정합성은 <b>PostgreSQL</b>, 디바이스·이벤트처럼 쓰기가 많고 스키마가 흔들리는 것은 <b>MongoDB</b>로 옮겼습니다. Redis는 <b>캐시와 큐를 별도 인스턴스로</b> 갈랐습니다 — 큐가 캐시 eviction에 쓸려가면 발송이 그대로 증발하기 때문입니다.</p></div>
+      <div class="rise"><h3 class="h3">저장소를 성격으로 나눴다</h3><p class="body-2 mt-s">서로 이어지고 앞뒤가 맞아야 하는 것은 <b>PostgreSQL</b>, 기기·이벤트처럼 쓰기가 잦고 저장할 모양이 자주 바뀌는 것은 <b>MongoDB</b>로 옮겼습니다. Redis는 <b>캐시와 대기열을 서로 다른 곳에</b> 갈랐습니다 — 캐시는 자리가 모자라면 오래된 값을 스스로 지우는데, 대기열을 같이 두면 보내야 할 알림까지 함께 사라지기 때문입니다.</p></div>
       <div class="rise"><h3 class="h3">접수와 발송을 떼어냈다</h3><p class="body-2 mt-s">API는 요청을 <b>대기열에 쌓아 두기만</b> 하고, 별도 서버의 프로그램이 하나씩 꺼내 발송합니다. 대기열 전용 제품(Kafka·RabbitMQ) 대신 Redis를 쓴 건, 이미 캐시로 쓰고 있어 <b>운영할 서버를 늘리지 않기</b> 위해서였습니다.</p></div>
-      <div class="rise"><h3 class="h3">포기한 것</h3><p class="body-2 mt-s">전면 재작성을 포기하고, 대신 <b>두 시스템을 한동안 동시에 유지하는 비용</b>을 받아들였습니다. 정기결제 스케줄러도 Go로 옮기지 않고 Console에 남겼습니다 — 결제 로직이 전부 TS에 있어 <b>이중 유지보수</b>가 생길 자리였습니다.</p></div>
+      <div class="rise"><h3 class="h3">포기한 것</h3><p class="body-2 mt-s">전면 재작성을 포기하고, 대신 <b>두 시스템을 한동안 동시에 유지하는 비용</b>을 받아들였습니다. 정기결제 스케줄러도 Go로 옮기지 않고 Console에 남겼습니다 — 결제 로직이 전부 TS에 있어 <b>같은 것을 두 곳에서 고쳐야 하는 자리</b>였습니다.</p></div>
     </div>
   </div>
 </section>
@@ -861,14 +870,14 @@
     <p class="eyebrow rise">이관 결과</p>
     <ul class="results mt-m rise">
       <li><b>0건</b><span>이관 기간 중 서비스 중단</span></li>
-      <li><b><span class="tick" style="--to:2"></span>건</b><span>운영 반영 전 발견·복원한 기능 회귀</span></li>
-      <li><b>수정 없이 확장</b><span>기존 파이프라인 그대로 Push API 대응</span></li>
+      <li><b><span class="tick" style="--to:2"></span>건</b><span>운영에 나가기 전에 찾아 되살린 기능</span></li>
+      <li><b>수정 없이 확장</b><span>발송 경로를 그대로 두고 외부 푸시 연동</span></li>
     </ul>
-    <p class="small mt-m rise" style="max-inline-size:84ch;color:var(--ink-2)"><b>회귀 2건은 이런 것이었습니다</b> — 구독을 정지시킨 앱에도 인앱 메시지가 계속 노출됐고(구버전에 있던 게이팅이 신버전에서 누락), 브라우저 대응으로 인증을 뺀 인앱 엔드포인트로는 타사 캠페인 열람과 통계 조작이 가능했습니다. 게이팅 복원 · 경로별 CORS 분기 · IP Rate limit(20rps)으로 막았습니다.</p>
+    <p class="small mt-m rise" style="max-inline-size:84ch;color:var(--ink-2)"><b>되돌아간 결함 2건은 이런 것이었습니다</b> — 구독을 정지시킨 앱에도 인앱 메시지가 계속 나갔고(구버전에 있던 차단이 신버전에서 빠졌습니다), 브라우저 대응으로 인증을 뺀 인앱 메시지 주소로는 남의 회사 캠페인을 열어 보고 통계를 건드릴 수 있었습니다. 차단을 되살리고, 경로마다 허용할 출처를 따로 두고, 한 IP가 보낼 수 있는 초당 요청 수를 묶어 막았습니다.</p>
     <hr class="hair mt-l">
     <figure class="dia-wrap mt-l rise">
       <svg class="dia" viewBox="0 0 900 172" role="img"
-           aria-label="접수는 web 서버의 Go API가 Redis Stream 에 적재만 하고, 실제 발송은 push 서버의 Go 워커가 소비해 FCM·SMTP 로 보낸다">
+           aria-label="접수는 web 서버의 Go API가 Redis Stream 에 쌓아 두기만 하고, 실제 발송은 push 서버의 Go 워커가 소비해 FCM·SMTP 로 보낸다">
         <defs>
           <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
           <marker id="a1e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-em" d="M0,0 L10,5 L0,10 z"/></marker>
@@ -892,7 +901,7 @@
 
         <rect class="bx-em" x="384" y="54" width="130" height="44" rx="7"/>
         <text class="t-em" x="449" y="74" text-anchor="middle">Redis Stream</text>
-        <text class="t-sub" x="449" y="89" text-anchor="middle">queue 인스턴스</text>
+        <text class="t-sub" x="449" y="89" text-anchor="middle">대기열 전용</text>
 
         <rect class="bx" x="572" y="54" width="130" height="44" rx="7"/>
         <text x="637" y="74" text-anchor="middle">Go 워커</text>
@@ -914,7 +923,7 @@
         <path class="fl" d="M702,76 H731 V48 H754" marker-end="url(#a1)"/>
         <path class="fl" d="M702,76 H731 V132 H754" marker-end="url(#a1)"/>
       </svg>
-      <figcaption><b>접수(web)와 발송(push)이 서버까지 갈라져 있습니다.</b> 대기열은 캐시와 다른 Redis에 둡니다 — 캐시는 자리가 부족하면 오래된 값을 스스로 지우기 때문에, 같은 곳에 두면 보내야 할 알림까지 함께 사라집니다. 나중에 외부 Push API를 붙일 때 <b>발송 파이프라인은 한 줄도 고치지 않았습니다</b> — 접수 경로만 하나 늘었습니다.</figcaption>
+      <figcaption><b>접수(web)와 발송(push)이 서버까지 갈라져 있습니다.</b> 대기열은 캐시와 다른 Redis에 둡니다 — 캐시는 자리가 부족하면 오래된 값을 스스로 지우기 때문에, 같은 곳에 두면 보내야 할 알림까지 함께 사라집니다. 나중에 외부 Push API를 붙일 때 <b>발송 쪽 코드는 한 줄도 고치지 않았습니다</b> — 접수 경로만 하나 늘었습니다.</figcaption>
     </figure>
   </div>
 </section>
@@ -958,16 +967,16 @@
     </figure>
 
     <div class="cols3 mt-m">
-      <div class="rise"><h3 class="h3">차감은 원자적으로</h3>
-        <p class="body-2 mt-s">Console 스케줄러(TS)와 Go API가 <b>같은 테이블에 동시 접근</b>합니다. 읽고·계산하고·쓰면 경합에서 잔량이 마이너스로 갑니다.</p>
+      <div class="rise"><h3 class="h3">차감은 한 번에 끝나게</h3>
+        <p class="body-2 mt-s">Console 스케줄러(TS)와 Go API가 <b>같은 테이블에 동시 접근</b>합니다. 읽고·계산하고·쓰는 세 단계로 나누면, 두 쪽이 겹칠 때 잔량이 마이너스로 갑니다.</p>
         <code class="code">UPDATE billing.charge_balances
    SET remaining = remaining - :qty
  <b>WHERE remaining &gt;= :qty;</b></code></div>
       <div class="rise"><h3 class="h3">두 지갑을 쓰는 순서</h3>
         <p class="body-2 mt-s">월 제공량(<code>subscription_quotas</code>)을 먼저 쓰고 <b>부족분만</b> 크레딧(<code>charge_balances</code>)에서 뺍니다. <b>기간이 지나면 사라지는 것부터 쓰는</b> 순서 — 고객에게 유리한 쪽입니다.</p>
-        <p class="body-2 mt-s"><code>UNIQUE(app_id, balance_type)</code>로 행 자체를 하나로 묶어 경합 지점을 좁혔습니다.</p></div>
+        <p class="body-2 mt-s"><code>UNIQUE(app_id, balance_type)</code>로 행 자체를 하나로 묶어 겹칠 자리를 좁혔습니다.</p></div>
       <div class="rise"><h3 class="h3">정리 못 한 부채</h3>
-        <p class="body-2 mt-s"><code>journey_instances</code>는 <b>정의가 PostgreSQL에 남아 있는데 실제 읽기·쓰기는 MongoDB</b>에서 일어납니다. 디바이스 단위 고쓰기라 Mongo가 맞고, 초기에 PG로 설계했다가 옮기면서 <b>PG 정의를 지우지 않았습니다.</b> 발견했고 정리 대상으로 보고 있습니다 — 숨기면 저장소에서 바로 걸리는 종류입니다.</p></div>
+        <p class="body-2 mt-s"><code>journey_instances</code>는 <b>정의가 PostgreSQL에 남아 있는데 실제 읽기·쓰기는 MongoDB</b>에서 일어납니다. 기기 단위로 쓰기가 잦아 Mongo가 맞고, 초기에 PG로 설계했다가 옮기면서 <b>PG 정의를 지우지 않았습니다.</b> 발견했고 정리 대상으로 보고 있습니다 — 숨기면 저장소에서 바로 걸리는 종류입니다.</p></div>
     </div>
     <dl class="spec mt-m rise">
       <dt>구성</dt><dd>PostgreSQL 스키마 분리 — core · billing · messaging · build · cms · mailing · support · backoffice · audit / MongoDB / Redis</dd>
@@ -981,7 +990,7 @@
     <p class="eyebrow rise">스키마 지도 — 도메인 경계를 스키마로 갈랐습니다</p>
     <figure class="dia-wrap mt-m rise">
       <svg class="dia" viewBox="0 0 700 214" role="img"
-           aria-label="PostgreSQL 9개 스키마 81개 테이블의 분포. cms 16, core 15, billing 15, messaging 12, support 6, backoffice 6, mailing 4, build 4, audit 2">
+           aria-label="PostgreSQL 스키마별 테이블 분포. cms 16, core 15, billing 15, messaging 12, support 6, backoffice 6, mailing 4, build 4, audit 2">
         <text class="t-key" x="108" y="20" text-anchor="end">cms</text>
         <rect class="bar" x="118" y="8" width="496" height="12" rx="2"/>
         <text class="t-num" x="622" y="20">16</text>
@@ -1010,7 +1019,7 @@
         <rect class="bar" x="118" y="184" width="62" height="12" rx="2"/>
         <text class="t-num" x="188" y="196">2</text>
       </svg>
-      <figcaption><b>9개 스키마 · 81개 테이블.</b> 도메인마다 스키마를 갈라 둔 덕에 <b>이관을 한 스키마씩 끊어서</b> 할 수 있었습니다. <code>core</code>가 허브고 — <code>apps</code> 테이블을 중심으로 나머지 스키마가 이 앱을 참조합니다.</figcaption>
+      <figcaption><b>도메인별로 나눈 스키마.</b> 도메인마다 스키마를 갈라 둔 덕에 <b>이관을 한 스키마씩 끊어서</b> 할 수 있었습니다. <code>core</code>가 중심이고 — <code>apps</code> 테이블을 중심으로 나머지 스키마가 이 앱을 참조합니다.</figcaption>
     </figure>
 
     <hr class="hair mt-m">
@@ -1060,7 +1069,7 @@
         <text x="148" y="132" text-anchor="middle">데이터 접근 3종 혼재</text>
         <text class="t-sub" x="148" y="147" text-anchor="middle">JPA · JDBC · MyBatis</text>
 
-        <text class="t-sub" x="148" y="182" text-anchor="middle">세션 인증 · 엔드포인트 567</text>
+        <text class="t-sub" x="148" y="182" text-anchor="middle">세션 인증 · 하나의 앱에 몰린 API</text>
 
         <path class="fl-em" d="M288,120 H352" marker-end="url(#a7e)"/>
         <text class="t-lbl t-em" x="320" y="110" text-anchor="middle">다시 세움</text>
@@ -1078,11 +1087,11 @@
 
         <rect class="bx-em" x="384" y="90" width="234" height="42" rx="7"/>
         <text class="t-em" x="501" y="109" text-anchor="middle">PC API</text>
-        <text class="t-sub" x="501" y="124" text-anchor="middle">REST · MyBatis · 엔드포인트 154</text>
+        <text class="t-sub" x="501" y="124" text-anchor="middle">REST · MyBatis · PC 전용 API</text>
 
         <rect class="bx-em" x="628" y="90" width="228" height="42" rx="7"/>
         <text class="t-em" x="742" y="109" text-anchor="middle">모바일 API</text>
-        <text class="t-sub" x="742" y="124" text-anchor="middle">REST · MyBatis · 엔드포인트 66</text>
+        <text class="t-sub" x="742" y="124" text-anchor="middle">REST · MyBatis · 모바일 전용 API</text>
 
         <rect class="bx" x="384" y="150" width="472" height="44" rx="7"/>
         <text x="620" y="170" text-anchor="middle">Spring Security + JWT</text>
@@ -1093,7 +1102,7 @@
         <path class="fl" d="M501,132 V144" marker-end="url(#a7)"/>
         <path class="fl" d="M742,132 V144" marker-end="url(#a7)"/>
       </svg>
-      <figcaption><b>v1은 화면·API·배치가 한 애플리케이션에 있었고, 데이터 접근이 JPA·JDBC·MyBatis 세 갈래로 갈려 있었습니다.</b> 같은 테이블을 세 방식으로 읽으니 고칠 때마다 어디를 건드려야 하는지부터 찾아야 했습니다. v2에서는 화면 서버와 API 서버를 갈라 PC·모바일이 각자 배포되게 하고, 데이터 접근을 <b>MyBatis 하나로 단일화</b>했으며, 세션 인증을 <code>Spring Security</code> + JWT로 바꿨습니다.</figcaption>
+      <figcaption><b>v1은 화면·API·배치가 한 애플리케이션에 있었고, 데이터 접근이 JPA·JDBC·MyBatis 세 갈래로 갈려 있었습니다.</b> 같은 테이블을 세 방식으로 읽으니 고칠 때마다 어디를 건드려야 하는지부터 찾아야 했습니다. v2에서는 화면 서버와 API 서버를 갈라 PC·모바일이 각자 배포되게 하고, 데이터 접근을 <b>MyBatis 하나로 통일</b>했으며, 세션 인증을 <code>Spring Security</code> + JWT로 바꿨습니다.</figcaption>
     </figure>
   </div>
 </section>
@@ -1109,7 +1118,7 @@
     <hr class="hair mt-l">
     <dl class="spec spec-tight mt-m rise">
       <dt>맡은 기능</dt><dd>웹·앱 공용 RESTful API 설계 · 기업 간 채팅과 푸시 알림 · <b>기업별 구독 플랜과 구독 상태 관리</b> · Quartz 배치 · Flutter WebView 앱 패킹</dd>
-      <dt>다음으로 이어진 것</dt><dd>여기서 만든 구독·결제 상태 관리가 <b>AppBox 구독 게이팅 설계로 이어졌습니다</b> — 이관 중 발견한 회귀 2건 중 하나가 정확히 그 게이팅이었습니다</dd>
+      <dt>다음으로 이어진 것</dt><dd>여기서 만든 구독·결제 상태 관리가 <b>AppBox 구독 차단 설계로 이어졌습니다</b> — 이관 중 발견한 결함 2건 중 하나가 정확히 그 차단이었습니다</dd>
     </dl>
   </div>
 </section>
@@ -1134,11 +1143,11 @@
     <div>
       <p class="step rise">01 / 03</p>
       <h3 class="h3 rise">클러스터 실시간 동기화</h3>
-      <p class="body-2 mt-s rise">Socket.IO 서버를 PM2 클러스터로 확장하고 Redis Adapter로 프로세스 간 이벤트를 동기화했습니다. JWT 소켓 미들웨어로 연결 단계에서 인증합니다.</p>
+      <p class="body-2 mt-s rise">Socket.IO 서버를 여러 개(PM2 클러스터)로 늘리고, 서버끼리 Redis를 거쳐 같은 메시지를 나눠 갖게 했습니다. 접속하는 순간 JWT로 신원을 확인합니다.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/dk-api.webp" width="1280" height="720" loading="lazy" decoding="async" alt="돌콩 API 문서"></button>
-      <figcaption>API 문서 — 엔드포인트와 WebSocket 이벤트 규격</figcaption>
+      <figcaption>API 문서 — 주소와 실시간 이벤트 규격</figcaption>
     </figure>
   </div>
 </section>
@@ -1166,7 +1175,7 @@
       <h3 class="h3 rise">안전한 운영 체계</h3>
       <p class="body-2 mt-s rise">같은 방에서 3회 신고되면 자동으로 내보내고 영구 차단합니다. 백오피스에서 내린 조치는 Redis를 거쳐 채팅 서버에 곧바로 전달됩니다.</p>
       <dl class="spec mt-l rise">
-        <dt>설계 기준</dt><dd>반경 5km · 방 24h / 메시지 7d TTL · 동일 방 신고 3회 자동 차단 · FCM 3초 스로틀</dd>
+        <dt>설계 기준</dt><dd>반경 5km · 방 24h / 메시지 7d TTL · 동일 방 신고 3회 자동 차단 · 푸시는 3초에 한 번만</dd>
       </dl>
     </div>
     <div class="hrow" style="--n:2">
@@ -1242,8 +1251,8 @@
     </figure>
 
     <dl class="spec spec-tight mt-m rise">
-      <dt>왜 TTL 인가</dt><dd>지워야 할 것을 <b>애플리케이션이 기억하지 않아도 되게</b> 만들었습니다. 배치가 죽어도 데이터는 제때 사라집니다</dd>
-      <dt>왜 sparse 인가</dt><dd>푸시를 끈 사용자는 <code>fcmToken</code> 이 없습니다. 없는 값을 인덱스에서 빼 <b>발송 대상 조회만 빠르게</b> 했습니다</dd>
+      <dt>왜 스스로 지워지게 했나</dt><dd>지워야 할 것을 <b>애플리케이션이 기억하지 않아도 되게</b> 만들었습니다. 배치가 죽어도 데이터는 제때 사라집니다</dd>
+      <dt>왜 없는 값을 인덱스에서 뺐나</dt><dd>푸시를 끈 사용자는 <code>fcmToken</code> 이 없습니다. 없는 값을 인덱스에서 빼 <b>발송 대상 조회만 빠르게</b> 했습니다</dd>
     </dl>
   </div>
 </section>
@@ -1271,7 +1280,7 @@
     <div class="cols3 mt-l">
       <div class="rise"><h3 class="h3">재직 중 · 1년 1개월</h3><p class="body-2 mt-s">코드아이디어 소속으로 <b>PG 결제 모듈을 교체</b>했습니다. 상품 선택부터 결제 완료까지 이어지는 화면과 뒤쪽 흐름을 같이 손봤습니다.<br><span class="sub">2023.05 – 2024.05</span></p></div>
       <div class="rise"><h3 class="h3">프리랜스 · 11개월</h3><p class="body-2 mt-s">퇴사 뒤 전 소속사 요청으로 같은 서비스를 이어받아 <b>유지보수를 맡았습니다</b>. 요청 60건을 처리하며 ISMS-P 인증 요건을 운영 서버에 반영했습니다.<br><span class="sub">2025.03 – 2026.01 · 재직 중 병행</span></p></div>
-      <div class="rise"><h3 class="h3">다룬 범위</h3><p class="body-2 mt-s">결제·인증·개인정보가 한 코드베이스 안에 같이 있었습니다. 화면부터 배포까지 <b>거치는 사람이 저 하나</b>여서, 고치기 전에 어디까지 번지는지를 먼저 봐야 했습니다.</p></div>
+      <div class="rise"><h3 class="h3">다룬 범위</h3><p class="body-2 mt-s">결제·인증·개인정보가 한 코드베이스 안에 같이 있었습니다. 화면부터 배포까지 <b>거치는 사람이 한 명</b>이라, 고치기 전에 어디까지 번지는지를 먼저 봐야 했습니다.</p></div>
     </div>
   </div>
 </section>
@@ -1359,9 +1368,9 @@
     <p class="eyebrow rise">직접 부딪힌 문제</p>
     <h2 class="h2 rise" style="max-inline-size:22ch;font-size:var(--t-h3)">만들면서 부딪힌 문제 세 가지</h2>
     <div class="cols3 mt-l">
-      <div class="rise"><h3 class="h3">층위를 고르는 문제 해결</h3><p class="body-2 mt-s">"한 사람은 한 커플에만 속한다"를 앱 코드에서 검사했더니, 두 요청이 동시에 들어올 때 규칙이 깨졌습니다. 코드를 더 조이는 대신 <b>데이터베이스가 두 번째 저장을 직접 거절</b>하도록 조건을 걸었습니다. 문제를 어느 층위에서 풀지 고르는 것이 절반입니다.</p></div>
-      <div class="rise"><h3 class="h3">릴리스에서만 터지는 크래시</h3><p class="body-2 mt-s">디버그는 멀쩡한데 릴리스만 부팅 즉시 죽었습니다. 원인은 코드가 아니라 <b>빌드 설정</b>이었습니다 — 빌드 도구가 "쓰이지 않는다"고 판단해 지운 클래스를, 앱이 실행 중에 이름으로 찾고 있었습니다. 개발 환경의 초록불은 프로덕션을 보장하지 않습니다.</p></div>
-      <div class="rise"><h3 class="h3">중복 요청 제거</h3><p class="body-2 mt-s">로그인 만료 응답이 한꺼번에 오면 토큰 갱신 요청도 여러 번 나갑니다. 갱신할 때마다 이전 토큰이 무효가 되는 방식이라 먼저 받은 토큰이 곧바로 못 쓰게 되고, <b>이유 없는 로그아웃</b>이 생겼습니다. 동시에 들어온 갱신 요청을 <b>하나로 합쳐</b> 처리하도록 고쳤습니다.</p></div>
+      <div class="rise"><h3 class="h3">어디서 막을지 고르기</h3><p class="body-2 mt-s">"한 사람은 한 커플에만 속한다"를 앱 코드에서 검사했더니, 두 요청이 동시에 들어올 때 규칙이 깨졌습니다. 코드를 더 조이는 대신 <b>데이터베이스가 두 번째 저장을 직접 거절</b>하도록 조건을 걸었습니다. 문제를 어디서 막을지 고르는 것이 절반입니다.</p></div>
+      <div class="rise"><h3 class="h3">출시 빌드에서만 죽던 문제</h3><p class="body-2 mt-s">개발용 빌드는 멀쩡한데 출시용 빌드만 켜자마자 죽었습니다. 원인은 코드가 아니라 <b>빌드 설정</b>이었습니다 — 빌드 도구가 "쓰이지 않는다"고 판단해 지운 클래스를, 앱이 실행 중에 이름으로 찾고 있었습니다. 개발할 때 잘 돈다고 실제 배포본이 도는 것은 아닙니다.</p></div>
+      <div class="rise"><h3 class="h3">겹쳐 나가는 요청 합치기</h3><p class="body-2 mt-s">로그인 만료 응답이 한꺼번에 오면 토큰 갱신 요청도 여러 번 나갑니다. 갱신할 때마다 이전 토큰이 무효가 되는 방식이라 먼저 받은 토큰이 곧바로 못 쓰게 되고, <b>이유 없는 로그아웃</b>이 생겼습니다. 동시에 들어온 갱신 요청을 <b>하나로 합쳐</b> 처리하도록 고쳤습니다.</p></div>
     </div>
     <dl class="spec mt-l rise">
       <dt>기술</dt><dd>Flutter · NestJS · PostgreSQL · Docker · AWS</dd>
@@ -1408,8 +1417,8 @@
     <p class="small mt-m rise">제약에 담은 의도</p>
     <dl class="spec spec-tight mt-s rise">
       <dt><code>UNIQUE(user_id) WHERE is_active</code></dt><dd>동시 수락으로 <b>한 사람이 두 커플</b>에 속하는 것 — 앱 코드로만 막으면 검사와 저장 사이의 틈으로 뚫립니다</dd>
-      <dt><code>(ownerScope, ownerId, sourceHash)</code></dt><dd><b>같은 사진 중복 업로드</b> — 재시도·네트워크 끊김에도 멱등하게</dd>
-      <dt><code>(ownerScope, ownerId, authorId, date)</code></dt><dd>작성자당 <b>하루 1엔트리</b> — upsert 키로 그대로 씁니다</dd>
+      <dt><code>(ownerScope, ownerId, sourceHash)</code></dt><dd><b>같은 사진 중복 업로드</b> — 다시 보내도, 중간에 끊겨도 하나만 남게</dd>
+      <dt><code>(ownerScope, ownerId, authorId, date)</code></dt><dd>작성자당 <b>하루 1엔트리</b> — 저장·갱신 키로 그대로 씁니다</dd>
       <dt><code>(mediaId, userId, emoji)</code></dt><dd>같은 이모지 중복 — <b>토글 구현이 자연히 따라옵니다</b></dd>
     </dl>
   </div>
@@ -1454,7 +1463,7 @@
 
     <dl class="spec spec-tight mt-m rise">
       <dt>22 모델 · 5 배포 단위</dt><dd>사용자·인증(<code>User</code> <code>SocialIdentity</code> <code>AuthSession</code> <code>PushToken</code>) / 관계(<code>Couple</code> <code>CoupleMember</code> <code>Invite</code>) / 콘텐츠(<code>Media</code> <code>Reaction</code> <code>Comment</code> <code>DiaryEntry</code> <code>Event</code> <code>WishItem</code>) / 기록(<code>MoodLog</code> <code>HeartNote</code> <code>QuestionAnswer</code> <code>LoveLanguageResult</code>) / 운영(<code>AdminUser</code> <code>AuditLog</code> <code>CsInquiry</code>)</dd>
-      <dt>append-only 감사</dt><dd><code>AuditLog</code> 는 수정·삭제하지 않습니다. <code>media.view</code> 같은 행위별 조회 인덱스를 둬 <b>관리자가 무엇을 봤는지</b>까지 남깁니다</dd>
+      <dt>지우지 않는 기록</dt><dd><code>AuditLog</code> 는 수정·삭제하지 않습니다. <code>media.view</code> 같은 행위별 조회 인덱스를 둬 <b>관리자가 무엇을 봤는지</b>까지 남깁니다</dd>
     </dl>
   </div>
 </section>
@@ -1479,7 +1488,7 @@
     <div>
       <p class="step rise">01 / 03</p>
       <h3 class="h3 rise">지어내지 않는 구조</h3>
-      <p class="body-2 mt-s rise">CLI 출력을 파싱하는 대신 훅 이벤트를 구독합니다. 이벤트가 없으면 캐릭터가 움직일 근거가 없어 가짜 활동이 구조적으로 불가능합니다.</p>
+      <p class="body-2 mt-s rise">화면에 찍힌 글자를 뜯어 읽는 대신, 도구가 직접 보내 주는 신호를 그대로 받습니다. 이벤트가 없으면 캐릭터가 움직일 근거가 없어 가짜 활동이 구조적으로 불가능합니다.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/yo-main.webp" width="1100" height="643" loading="lazy" decoding="async" alt="윤사무실 기본 화면 - 픽셀 사무실"></button>
@@ -1509,7 +1518,7 @@
     <div>
       <p class="step rise">03 / 03</p>
       <h3 class="h3 rise">되돌릴 수 있는 실행</h3>
-      <p class="body-2 mt-s rise">git plumbing으로 임시 저장소에 스냅샷을 만듭니다. 사용자의 git은 건드리지 않고, 스냅샷은 30개까지 보관합니다.</p>
+      <p class="body-2 mt-s rise">git의 저수준 명령으로, 따로 둔 저장소에 그때그때 상태를 통째로 담아 둡니다. 사용자의 git은 건드리지 않고, 스냅샷은 30개까지 보관합니다.</p>
     </div>
     <figure>
       <button type="button" data-zoom aria-label="확대해서 보기"><img class="shot desk" src="img/yo-undo.webp" width="1100" height="643" loading="lazy" decoding="async" alt="윤사무실 스냅샷 되돌리기 화면"></button>
@@ -1583,7 +1592,7 @@
 
     <dl class="spec spec-tight mt-m rise">
       <dt>이벤트 9종</dt><dd><code>session</code> · <code>prompt</code> · <code>agent_start</code> · <code>tool</code> · <code>agent_stop</code> · <code>error</code> · <code>reply</code> · <code>command_taken</code> · <code>cancel</code> — 공통 필드 <code>ts</code> 는 <b>발생 시각</b>이라 재생할 때 그대로 씁니다</dd>
-      <dt>귀속은 추론하지 않는다</dt><dd>어느 에이전트가 한 일인지 <b>훅이 남긴 값만</b> 씁니다. 로그에서 유추하면 그럴듯한 거짓말이 화면에 뜹니다</dd>
+      <dt>누가 했는지 짐작하지 않는다</dt><dd>어느 에이전트가 한 일인지 <b>훅이 남긴 값만</b> 씁니다. 로그에서 유추하면 그럴듯한 거짓말이 화면에 뜹니다</dd>
     </dl>
   </div>
 </section>
