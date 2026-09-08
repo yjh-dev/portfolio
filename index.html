@@ -98,7 +98,7 @@
   .slide.invert{background:var(--ink);color:#000}
 
   @media (width >= 64rem){
-    :root{--pad:max(var(--gut),5.6rem)}
+    :root{--pad:max(var(--gut),5.6rem);--rc:0rem}   /* --rc : 리모콘이 설 자리 */
     html,body{block-size:100%;overflow:hidden}
     body{timeline-scope:--page}
     .deck{flex-direction:row;block-size:100svh;inline-size:100vw;position:relative;
@@ -114,7 +114,7 @@
           scroll-snap-type:y mandatory;scroll-snap-align:start;scroll-snap-stop:always;
           scrollbar-width:none}
     .chap::-webkit-scrollbar{display:none}
-    .slide{inline-size:100%;block-size:100svh;
+    .slide{inline-size:100%;block-size:100svh;padding-inline-end:calc(var(--pad) + var(--rc));
            scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;
            display:grid;align-content:center;
            padding-block:clamp(4.5rem,9vh,6rem) clamp(2.5rem,6vh,4rem);
@@ -405,6 +405,7 @@
   /* ══════════ 상단 내비 ══════════
      섹션 이름 + 그 섹션 안에서의 위치를 한 줄에 담는다.
      활성 섹션만 알약으로 도드라지고, 점은 활성 섹션 것만 보인다. */
+  .chrome{padding-inline-end:var(--rc,0)}
   .chrome{position:sticky;inset-block-start:0;z-index:40;
           background:#000000c2;backdrop-filter:saturate(180%) blur(20px);
           border-block-end:1px solid var(--hair)}
@@ -451,66 +452,62 @@
          justify-content:flex-end}
 
   /* ══════════ 리모콘 ══════════
-     오른쪽 여백에 접힌 채로 서 있다가, 손이 닿으면 이름까지 펼친다.
-     붙박이 요소라 펼쳐져도 본문 레이아웃은 밀리지 않는다. */
+     오른쪽에 상시로 서 있는 목차다. 지금 어느 프로젝트의 몇 번째 화면인지를
+     늘 보여 주고, 눌러서 바로 건너뛴다. 본문은 이 폭만큼 자리를 비워 둔다. */
   .remote{display:none;position:fixed;z-index:45;
-          inset-inline-end:clamp(.45rem,.8vw,1rem);inset-block-start:50%;translate:0 -50%;
-          flex-direction:column;gap:.45rem;padding:.45rem;overflow:hidden;
-          inline-size:3.9rem;border-radius:1.05rem;
-          background:#0d0d10cc;backdrop-filter:saturate(180%) blur(20px);
-          box-shadow:inset 0 0 0 1px var(--hair),0 14px 44px #00000059;
-          transition:inline-size .34s var(--ease),background .22s var(--ease)}
-  @media (width >= 64rem){ .remote{display:flex} }
-  .remote:hover,.remote:focus-within{inline-size:11.4rem}
+          inset-inline-end:clamp(.7rem,1.1vw,1.5rem);inset-block-start:50%;translate:0 -50%;
+          flex-direction:column;gap:.5rem;padding:.7rem .55rem .55rem;
+          inline-size:9.6rem;border-radius:1rem;
+          background:#131317e6;backdrop-filter:saturate(180%) blur(20px);
+          box-shadow:inset 0 0 0 1px #ffffff2e,0 18px 50px #00000073}
+  /* 본문이 좁아지지 않을 만큼 넉넉할 때만 세운다 */
+  @media (width >= 78rem){ :root{--rc:11rem} .remote{display:flex} }
 
-  /* 십자 단추 — 가로는 프로젝트, 세로는 화면 */
-  .rc-pad{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
-          inline-size:3rem;margin-inline:auto}
-  .rc-b{display:flex;align-items:center;justify-content:center;
-        block-size:.96rem;border-radius:.34rem;color:var(--ink-3);
-        font-size:.66rem;line-height:1;
-        transition:background .18s var(--ease),color .18s var(--ease),opacity .18s}
-  .rc-b:hover{background:#ffffff1f;color:var(--ink)}
-  .rc-b[disabled]{opacity:.22;pointer-events:none}
-  .rc-b.u{grid-area:1/2} .rc-b.l{grid-area:2/1}
-  .rc-b.m{grid-area:2/2;font-size:.5rem} .rc-b.r{grid-area:2/3} .rc-b.d{grid-area:3/2}
+  .rc-h{font-size:.66rem;font-weight:640;letter-spacing:.06em;color:var(--ink-3);
+        padding-inline:.42rem;text-transform:uppercase}
 
-  /* 프로젝트 목록 */
-  .rc-list{list-style:none;margin:0;padding:.4rem 0 0;display:grid;gap:1px;
-           border-block-start:1px solid var(--hair)}
-  .rc-list button{display:flex;align-items:center;gap:.42rem;inline-size:100%;
-                  block-size:1.5rem;padding-inline:.3rem;border-radius:.48rem;
-                  color:var(--ink-3);font-size:.74rem;font-weight:520;
-                  letter-spacing:-.01em;line-height:1;text-align:start;
+  .rc-list{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+  .rc-list > li > button{display:flex;align-items:center;gap:.45rem;inline-size:100%;
+                  block-size:1.72rem;padding-inline:.42rem;border-radius:.55rem;
+                  color:var(--ink-2);font-size:.8rem;font-weight:540;
+                  letter-spacing:-.012em;line-height:1;text-align:start;white-space:nowrap;
                   transition:background .18s var(--ease),color .18s var(--ease)}
-  .rc-list button:hover{color:var(--ink-2);background:#ffffff0f}
-  .rc-list button[aria-current]{color:var(--ink);font-weight:640;background:#ffffff1a}
-  .rc-k{flex:0 0 2.1rem;font-family:var(--mono);font-size:.64rem;text-align:center;
-        font-variant-numeric:tabular-nums}
-  .rc-name{flex:1 1 auto;white-space:nowrap;opacity:0;
-           transition:opacity .2s var(--ease)}
-  .rc-of{flex:0 0 auto;font-family:var(--mono);font-size:.6rem;font-style:normal;
-         color:var(--ink-3);opacity:0;transition:opacity .2s var(--ease);
-         font-variant-numeric:tabular-nums}
-  .remote:hover .rc-name,.remote:focus-within .rc-name,
-  .remote:hover .rc-of,.remote:focus-within .rc-of{opacity:1}
-  /* 번호가 없는 칸은 짧은 이름이 곧 이름이라, 펼치면 한 번만 보이게 한다 */
-  .rc-k{transition:opacity .2s var(--ease)}
-  .remote:hover .dup .rc-k,.remote:focus-within .dup .rc-k{opacity:0}
-  .rc-count{font-family:var(--mono);font-size:.64rem;color:var(--ink-3);
+  .rc-list > li > button:hover{color:var(--ink);background:#ffffff14}
+  .rc-list li.on > button{color:#fff;font-weight:680;background:var(--accent)}
+  .rc-k{flex:0 0 1.35rem;font-family:var(--mono);font-size:.66rem;
+        color:inherit;opacity:.72;font-variant-numeric:tabular-nums}
+  .rc-list li.on .rc-k{opacity:.9}
+  .rc-name{flex:1 1 auto;overflow:hidden;text-overflow:ellipsis}
+  .rc-of{flex:0 0 auto;font-family:var(--mono);font-size:.62rem;font-style:normal;
+         opacity:.85;font-variant-numeric:tabular-nums}
+
+  /* 그 프로젝트 안의 화면 — 열린 칸에서만 보인다 */
+  .rc-sub{display:none;list-style:none;margin:.3rem 0 .36rem;padding-inline:.45rem;
+          align-items:center;flex-wrap:wrap;gap:3px}
+  .rc-list li.on .rc-sub{display:flex}
+  .rc-d{display:block;flex:0 0 auto;inline-size:8px;block-size:8px;padding:0;
+        border-radius:999px;background:#ffffff38;
+        transition:background .18s var(--ease),scale .18s var(--ease)}
+  .rc-d:hover{background:#ffffffb3;scale:1.25}
+  .rc-d[data-seen]{background:#ffffff5c}
+  .rc-d[aria-current]{background:var(--accent);scale:1.25}
+
+  .rc-count{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);
             text-align:center;font-variant-numeric:tabular-nums;
-            padding-block-start:.34rem;border-block-start:1px solid var(--hair)}
+            padding-block-start:.45rem;border-block-start:1px solid #ffffff1f}
 
   /* 밝은 화면 위에서는 색을 뒤집는다 */
-  .on-light .remote{background:#ffffffd6;
-                    box-shadow:inset 0 0 0 1px #0000001f,0 14px 44px #00000014}
-  .on-light .rc-b,.on-light .rc-list button{color:#0000008a}
-  .on-light .rc-b:hover{background:#0000000f;color:#000}
-  .on-light .rc-list button:hover{color:#000000b8;background:#0000000d}
-  .on-light .rc-list button[aria-current]{color:#000;background:#00000014}
-  .on-light .rc-list{border-block-start-color:#00000026}
+  .on-light .remote{background:#fffffff2;
+                    box-shadow:inset 0 0 0 1px #00000033,0 18px 50px #00000029}
+  .on-light .rc-h{color:#00000073}
+  .on-light .rc-list > li > button{color:#000000a6}
+  .on-light .rc-list > li > button:hover{color:#000;background:#0000000f}
+  .on-light .rc-list li.on > button{color:#fff;background:#0071e3}
+  .on-light .rc-d{background:#00000026}
+  .on-light .rc-d[data-seen]{background:#00000059}
+  .on-light .rc-d:hover{background:#000000a6}
+  .on-light .rc-d[aria-current]{background:#0071e3}
   .on-light .rc-count{color:#00000073;border-block-start-color:#00000026}
-  .on-light .rc-of{color:#00000073}
 
   /* ── 좁은 화면 : 두 줄 + 가장자리 페이드 ── */
   @media (width < 60rem){
@@ -720,15 +717,9 @@
   </div>
 </header>
 
-<!-- 리모콘 — 두 축을 손에 쥔다. 좌우는 프로젝트, 위아래는 그 안의 화면 -->
+<!-- 리모콘 — 어느 프로젝트의 몇 번째 화면인지를 오른쪽에 상시로 세워 둔다 -->
 <aside class="remote" id="remote" aria-label="화면 이동">
-  <div class="rc-pad">
-    <button class="rc-b u" type="button" data-rc="up"    title="이전 화면"     aria-label="이전 화면">↑</button>
-    <button class="rc-b l" type="button" data-rc="left"  title="이전 프로젝트" aria-label="이전 프로젝트">←</button>
-    <button class="rc-b m" type="button" data-rc="home"  title="이 프로젝트 표지로" aria-label="이 프로젝트 표지로">•</button>
-    <button class="rc-b r" type="button" data-rc="right" title="다음 프로젝트" aria-label="다음 프로젝트">→</button>
-    <button class="rc-b d" type="button" data-rc="down"  title="다음 화면"     aria-label="다음 화면">↓</button>
-  </div>
+  <p class="rc-h">화면 이동</p>
   <ol class="rc-list" id="rc-list"></ol>
   <p class="rc-count" id="rc-count"></p>
 </aside>
@@ -1910,41 +1901,41 @@
   });
 
   /* ── 리모콘 ───────────────────────────────
-     십자 단추는 두 축을 그대로 옮긴다 — 좌우는 프로젝트, 위아래는 그 안의 화면.
-     접혀 있을 땐 표지 번호만 보이고, 손이 닿으면 이름이 따라 나온다. */
+     오른쪽에 늘 서 있는 목차. 프로젝트를 누르면 표지로 가고,
+     열린 칸 아래 점을 누르면 그 안의 화면으로 바로 간다. */
   const rcList  = document.getElementById('rc-list');
   const rcCount = document.getElementById('rc-count');
-  const rcBtn   = [];
+  const rcRow   = [];
   const rcName  = c => secName.get(c.firstElementChild.id) || '처음';
   const rcKey   = c => {
     const num = c.querySelector('.num-bg');
-    return num ? clean(num.textContent) : rcName(c).slice(0, 2);
+    return num ? clean(num.textContent) : '';
   };
-  chaps.forEach((c, i) => {
+  chaps.forEach((c, ci) => {
     const li = document.createElement('li');
     const b  = document.createElement('button');
-    b.type = 'button';
-    b.title = rcName(c);
-    const key = rcKey(c), name = rcName(c);
-    if (key === name) b.classList.add('dup');
-    const k = document.createElement('i');   k.className = 'rc-k';    k.textContent = key;
-    const t = document.createElement('span'); t.className = 'rc-name'; t.textContent = name;
+    b.type = 'button'; b.title = rcName(c);
+    const k = document.createElement('i');    k.className = 'rc-k';    k.textContent = rcKey(c);
+    const t = document.createElement('span'); t.className = 'rc-name'; t.textContent = rcName(c);
     const o = document.createElement('em');   o.className = 'rc-of';
     b.append(k, t, o);
     b.addEventListener('click', () => goTo(slides.indexOf(c.firstElementChild)));
-    li.appendChild(b); rcList.appendChild(li); rcBtn.push(b);
-  });
-  const rcPad = {};
-  document.querySelectorAll('#remote [data-rc]').forEach(b => {
-    rcPad[b.dataset.rc] = b;
-    b.addEventListener('click', () => {
-      const k = b.dataset.rc;
-      if (k === 'up') step(-1);
-      else if (k === 'down') step(1);
-      else if (k === 'left') goChap(-1);
-      else if (k === 'right') goChap(1);
-      else goTo(slides.indexOf(chaps[curChap()].firstElementChild));
+
+    const sub = document.createElement('ol'); sub.className = 'rc-sub';
+    const dots = [...c.children].map(sl => {
+      const i  = slides.indexOf(sl);
+      const d  = document.createElement('li');
+      const db = document.createElement('button');
+      db.type = 'button'; db.className = 'rc-d'; db.dataset.i = i;
+      db.title = labels[i] || '';
+      db.setAttribute('aria-label', (i + 1) + ' / ' + slides.length + ' ' + (labels[i] || ''));
+      db.addEventListener('click', () => goTo(i));
+      d.appendChild(db); sub.appendChild(d);
+      return db;
     });
+
+    li.append(b, sub); rcList.appendChild(li);
+    rcRow.push({ li, of: o, dots });
   });
 
   /* 각 장이 어느 섹션에 속하는지 — 섹션별 구간을 미리 잡아 둔다 */
@@ -2012,18 +2003,17 @@
       }
     });
     /* 리모콘도 같은 값으로 맞춘다 */
-    rcBtn.forEach((b, i) => {
+    rcRow.forEach((r, i) => {
       const on = i === ci;
-      b.toggleAttribute('aria-current', on);
-      const c = chaps[i];
-      b.lastElementChild.textContent =
-        on ? (n - slides.indexOf(c.firstElementChild) + 1) + '/' + c.children.length : '';
+      r.li.classList.toggle('on', on);
+      r.of.textContent = on ? (n - +r.dots[0].dataset.i + 1) + '/' + r.dots.length : '';
+      if (on) r.dots.forEach(d => {
+        const j = +d.dataset.i;
+        d.toggleAttribute('aria-current', j === n);
+        d.toggleAttribute('data-seen', j < n);
+      });
     });
     rcCount.textContent = count.textContent;
-    if (rcPad.up)    rcPad.up.disabled    = n === 0;
-    if (rcPad.down)  rcPad.down.disabled  = n === slides.length - 1;
-    if (rcPad.left)  rcPad.left.disabled  = ci === 0;
-    if (rcPad.right) rcPad.right.disabled = ci === chaps.length - 1;
 
     if (cur) drawDots(cur, n); else { dotbox.textContent = ''; shown = null; }
     // 주소창을 현재 위치에 맞춰 둔다 — 중간을 복사해 공유해도 그 자리에서 열린다.
