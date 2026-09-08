@@ -255,22 +255,29 @@
   .roles{display:grid;gap:clamp(1.75rem,4vw,3rem);margin-block-start:clamp(2rem,5vh,3.5rem)}
   /* 넓은 화면에서는 열을 나누지 않고 가로 타임라인으로 — 열을 쪼개면 한 줄이 15자로 줄어 읽기 어렵다 */
   @media (width >= 60rem){
-    .roles{grid-template-columns:1fr;gap:clamp(.6rem,1.5vh,1.1rem);margin-block-start:clamp(1rem,2.4vh,1.9rem)}
+    .roles{grid-template-columns:1fr;gap:clamp(.3rem,.8vh,.6rem);margin-block-start:clamp(1rem,2.4vh,1.9rem)}
     .roles li{display:grid;grid-template-columns:clamp(11rem,17.5vw,18.5rem) minmax(0,1fr);padding-block-start:1rem;
               column-gap:clamp(1.5rem,3vw,3rem);align-items:start}
-    .roles li > .when,.roles li > .who,.roles li > .what{grid-column:1}
-    .roles li > .what{margin-block-end:0}
-    .roles li > .body-2{grid-column:2;grid-row:1 / span 3;max-inline-size:66ch}
+    .roles li > .when,.roles li > .who,.roles li > .what,.roles li > .stk{grid-column:1}
+    .roles li > .what{margin-block-end:.35rem}
+    .roles li > .body-2{grid-column:2;grid-row:1 / span 4;max-inline-size:66ch}
   }
   .cols3 > div{padding-block-start:1.1rem;border-block-start:1px solid var(--hair)}
   .books{display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap}
   .books img{inline-size:clamp(3.2rem,4.4vw,4.6rem);block-size:auto;border-radius:4px;
              box-shadow:0 2px 10px #0008}
   .books span{align-self:center}
-  .roles li{padding-block-start:1.25rem;border-block-start:1px solid var(--hair)}
+  .roles li{padding-block-start:.9rem;border-block-start:1px solid var(--hair)}
+  /* 어느 스택으로 일한 시기인지 한눈에 갈라 보이게 한다 */
+  .roles .stk{display:flex;flex-wrap:wrap;gap:.3rem;margin-block:0 .1rem}
+  .roles .stk span{font-size:calc(var(--t-small) * .86);line-height:1;white-space:nowrap;
+                   padding:.32rem .58rem;border-radius:999px;font-weight:560}
+  .roles .stk .p{color:var(--ink);box-shadow:inset 0 0 0 1px #ffffff33}
+  .roles .stk .j{color:var(--accent);box-shadow:inset 0 0 0 1px #2997ff45}
+  .roles .stk .e{color:var(--ink-3);box-shadow:inset 0 0 0 1px var(--hair)}
   .roles .when{color:var(--ink-3);font-size:var(--t-small);font-variant-numeric:tabular-nums}
   .roles .who{font-size:var(--t-h3);letter-spacing:-.025em;font-weight:640;margin-block-start:.35rem}
-  .roles .what{color:var(--ink-3);font-size:var(--t-small);margin-block:.25rem .7rem;text-wrap:balance}
+  .roles .what{color:var(--ink-3);font-size:var(--t-small);margin-block:.25rem .35rem;text-wrap:balance}
 
   /* 결과 숫자 */
   .results{display:grid;gap:1.5rem 3rem;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr))}
@@ -702,24 +709,28 @@
         <div class="when">2024.09 — 2026.07</div>
         <div class="who">모바일파트너스</div>
         <div class="what">책임연구원 · 1년 10개월 · 자체 솔루션</div>
+        <div class="stk"><span class="p">PHP · Laravel</span><span class="e">Next.js · Go</span></div>
         <p class="body-2">모바일 앱 운영 B2B SaaS AppBox의 본 서비스를 <b>Laravel 11</b>로 1년 9개월간 개발·운영했습니다. 이후 같은 시스템을 Next.js + Go 구조로 서비스 중단 없이 옮겼고, 새 구조는 제가 맡아 만들었습니다. GPS 실시간 채팅 돌콩의 채팅 서버와 백오피스도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2025.03 — 2026.01</div>
         <div class="who">프리랜스</div>
         <div class="what">인슈플러스 · 플라잉닥터스 (재직 중 병행)</div>
+        <div class="stk"><span class="p">PHP 레거시</span></div>
         <p class="body-2">전 소속사에서 담당하던 여행보험 B2C 서비스(<b>PHP 레거시</b>)를 위탁받아 유지보수했습니다. 요청 60건을 처리하며 <b>ISMS-P 인증 요건</b>을 운영 서버에 반영했고 — 개인정보 마스킹, 컬럼 암호화, 조회 통제, 동시접속 제한 — 결제·알림톡 장애와 AWS EC2 운영을 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2023.05 — 2024.05</div>
         <div class="who">코드아이디어</div>
         <div class="what">주임 · 1년 1개월 · SI</div>
+        <div class="stk"><span class="j">Java · Spring Boot</span><span class="p">PHP · Laravel</span></div>
         <p class="body-2"><b>Java · Spring Boot</b>로 B2B 플랫폼 마켓해머의 백엔드를 담당했습니다. 1세대(Spring Boot 2.7 · Java 8)에서 기능을 만들다, 퇴사 전 2개월간 PC 백엔드·프론트를 <b>Java 17 · Spring Boot 3로 다시 세웠습니다</b>(첫 커밋부터 제가 작성). 여행보험 PG 결제 모듈 교체와 Laravel 10 고객사 웹 2건도 맡았습니다.</p>
       </li>
       <li class="rise">
         <div class="when">2022.04 — 2023.05</div>
         <div class="who">비젠소프트</div>
         <div class="what">사원 · 1년 2개월 · 웹에이전시</div>
+        <div class="stk"><span class="j">Java · JSP · Spring</span><span class="p">PHP 레거시</span></div>
         <p class="body-2"><b>JSP · Spring</b>과 PHP 레거시로 사내 ERP, 장비 예약, 전자계약 등 고객사 웹 서비스 6건을 개발했습니다. 남이 쓴 레거시 코드를 읽고 고치는 훈련을 이때 했습니다.</p>
       </li>
     </ul>
