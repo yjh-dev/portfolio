@@ -269,12 +269,13 @@
   .books span{align-self:center}
   .roles li{padding-block-start:.9rem;border-block-start:1px solid var(--hair)}
   /* 어느 스택으로 일한 시기인지 한눈에 갈라 보이게 한다 */
-  .roles .stk{display:flex;flex-wrap:wrap;gap:.3rem;margin-block:0 .1rem}
-  .roles .stk span{font-size:calc(var(--t-small) * .86);line-height:1;white-space:nowrap;
-                   padding:.32rem .58rem;border-radius:999px;font-weight:560}
-  .roles .stk .p{color:var(--ink);box-shadow:inset 0 0 0 1px #ffffff33}
-  .roles .stk .j{color:var(--accent);box-shadow:inset 0 0 0 1px #2997ff45}
-  .roles .stk .e{color:var(--ink-3);box-shadow:inset 0 0 0 1px var(--hair)}
+  .stk{display:inline-flex;flex-wrap:wrap;gap:.3rem;vertical-align:middle}
+  .stk > span{font-size:calc(var(--t-small) * .86);line-height:1;white-space:nowrap;
+              padding:.32rem .58rem;border-radius:999px;font-weight:560}
+  .stk > .p{color:var(--ink);box-shadow:inset 0 0 0 1px #ffffff33}
+  .stk > .j{color:var(--accent);box-shadow:inset 0 0 0 1px #2997ff45}
+  .stk > .e{color:var(--ink-3);box-shadow:inset 0 0 0 1px var(--hair)}
+  .roles .stk{display:flex;margin-block:0 .1rem}
   .roles .when{color:var(--ink-3);font-size:var(--t-small);font-variant-numeric:tabular-nums}
   .roles .who{font-size:var(--t-h3);letter-spacing:-.025em;font-weight:640;margin-block-start:.35rem}
   .roles .what{color:var(--ink-3);font-size:var(--t-small);margin-block:.25rem .35rem;text-wrap:balance}
@@ -598,6 +599,7 @@
     .hrow > *{inline-size:auto !important}
     .arch li{background:#f2f2f4 !important}
     .pill{color:#000 !important;box-shadow:inset 0 0 0 1px #999}
+    .stk > span{color:#000 !important;box-shadow:inset 0 0 0 1px #999}
     .split > .inner{display:block !important}
   }
 }
@@ -676,7 +678,7 @@
     <div class="foot">
       <dl class="spec card fadeUp" style="--i:1">
         <dt>경력</dt><dd>4년 1개월 · 2022.04 – 2026.07</dd>
-        <dt>주력</dt><dd><b>PHP · Laravel</b> &nbsp;/&nbsp; <b>Java · Spring Boot</b></dd>
+        <dt>주력</dt><dd><span class="stk"><span class="p">PHP · Laravel</span><span class="j">Java · Spring Boot</span></span></dd>
         <dt>교육</dt><dd>DBMS기반 빅데이터 응용 SW개발자 전문과정<br><span class="sub">중앙정보처리학원 · 2018.08 – 2019.03</span></dd>
         <dt>이메일</dt><dd><a class="ln-a" href="mailto:yjhzzzzdev@gmail.com">yjhzzzzdev@gmail.com</a></dd>
         <dt>GitHub</dt><dd><a class="ln-a" href="https://github.com/yjh-dev" target="_blank" rel="noopener">github.com/yjh-dev</a></dd>
@@ -1575,7 +1577,7 @@
     <h2 class="h2 rise">기술 스택</h2>
     <div class="flowline mt-l" aria-hidden="true"><div class="marquee"><span>PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot ·</span><span>PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot · PHP · Laravel · Java · Spring Boot ·</span></div></div>
     <dl class="spec mt-l rise">
-      <dt>주력</dt><dd><b>PHP · Laravel</b> (4년) &nbsp;/&nbsp; <b>Java · Spring Boot</b> (2년 3개월)<br><span class="sub">실무 4년 대부분을 이 두 스택 위에서 일했습니다</span></dd>
+      <dt>주력</dt><dd><span class="stk"><span class="p">PHP · Laravel</span><span class="j">Java · Spring Boot</span></span><span class="sub">PHP 4년 · Java 2년 3개월 — 실무 대부분을 이 두 스택 위에서 일했습니다</span></dd>
       <dt>그 외 언어</dt><dd>Go · Node.js · TypeScript · Dart</dd>
       <dt>백엔드</dt><dd>Spring Boot (MyBatis · JPA · Spring Security · Quartz) · Laravel (Eloquent · Artisan · Blade) · Echo(Go) · Express · NestJS</dd>
       <dt>프론트엔드 · 앱</dt><dd>Thymeleaf · Blade · jQuery &nbsp;/&nbsp; Next.js · React &nbsp;/&nbsp; Flutter · Electron</dd>
